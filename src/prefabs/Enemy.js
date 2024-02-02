@@ -1,6 +1,6 @@
 class Enemy extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, velocityX) {
-        super(scene, width+70, Phaser.Math.Between(height-35, 35), 'enemyCharacter')
+        super(scene, width+70, Phaser.Math.Between(height-35-55, 35), 'enemyCharacter')
 
         this.scene.add.existing(this)
         this.scene.physics.add.existing(this)

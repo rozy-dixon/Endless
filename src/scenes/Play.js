@@ -16,17 +16,22 @@ class Play extends Phaser.Scene {
 
     create() {
         console.log("PLAY SCENE! YIPPPEEEEE!!") // just checking :)
+
         // set background
         this.background = this.add.tileSprite(0, 0, 980, 755, 'background').setOrigin(0, 0)
-        const graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xFFFFFF }, fillStyle: { color: 0xFFFFFF }})
-        const emptyBarUI = new Phaser.Geom.Rectangle(width/2, 100, 400, 35)
-        graphics.strokeRectShape(emptyBarUI)
 
+        // UI CONFIG
+        // https://phaser.io/examples/v3/category/geom/rectangle used as reference
+        // https://janisjenny.medium.com/how-to-set-world-bounds-with-phaser-99bde692970e used as reference
+        this.physics.world.setBounds(0, 0, width, height-55, true, true, true, true)
+        const graphics = this.add.graphics({ lineStyle: { width: 3, color: 0xFFFFFF }, fillStyle: { color: 0x000000 }})
+        const emptyBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2), 710, 500, 35)
+        graphics.strokeRectShape(emptyBarUI)
 
         // COLLISION CONFIG
         // https://github.com/nathanaltice/BigBodies used as reference
         // player character physics and movement config
-        this.player = this.physics.add.sprite(width/2, height/2, 'playerCharacter', 1)
+        this.player = this.physics.add.sprite(width/2, (height-55)/2, 'playerCharacter', 1)
         this.player.body.setCollideWorldBounds(true)
         this.player.setBounce(this.BOUNCE)
         this.player.body.setCircle(this.player.width/2) // While tiles are typically square, I chose to use a circular body. ->
@@ -42,12 +47,12 @@ class Play extends Phaser.Scene {
         this.thing.body.onOverlap = true
         this.thing.anims.play('thing-calm')
         // ex collision config
-        this.ex = this.physics.add.sprite(width-50, height/4, 'exCharacter', 1)
+        this.ex = this.physics.add.sprite(width-50, (height-55)/4, 'exCharacter', 1)
         this.ex.body.setCircle(this.ex.width/2)
         this.ex.body.onOverlap = true
         this.ex.anims.play('ex')
         // ex collision config
-        this.oh = this.physics.add.sprite(width-50, (height/4)*3, 'ohCharacter', 1)
+        this.oh = this.physics.add.sprite(width-50, ((height-55)/4)*3, 'ohCharacter', 1)
         this.oh.body.setCircle(this.ex.width/2)
         this.oh.body.onOverlap = true
         this.oh.anims.play('oh')
@@ -98,6 +103,8 @@ class Play extends Phaser.Scene {
         }
         if(cursors.space.isDown) {
             this.player.x += 20
+        } else if(cursors.shift.isDown) {
+            this.player.x -= 20
         }
 
         // detecting collisions
