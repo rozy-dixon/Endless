@@ -30,19 +30,11 @@ class Play extends Phaser.Scene {
 
         // COLLISION CONFIG
         // https://github.com/nathanaltice/BigBodies used as reference
-        // player character physics and movement config
-        this.player = this.physics.add.sprite(width/2, (height-55)/2, 'playerCharacter', 1)
-        this.player.body.setCollideWorldBounds(true)
-        this.player.setBounce(this.BOUNCE)
-        this.player.body.setCircle(this.player.width/2) // While tiles are typically square, I chose to use a circular body. ->
-        this.player.setMaxVelocity(this.MAX_VELOCITY)   // I wanted the player to have a little wiggle room considering ->
-        this.player.setDamping(true)                    // the sprite is both a little unconventional and less visually stable.
-        this.player.setDrag(this.DRAG)
+        this.player = new Player(this)
         this.player.body.onCollide = true
         this.player.body.onOverlap = true
-        this.player.anims.play('neutral')
         // thing collision config
-        this.thing = this.physics.add.sprite(-175, 0, 'thing', 1).setOrigin(0, 0)
+        this.thing = this.physics.add.sprite(0, 0, 'thing', 1).setOrigin(0, 0)
         this.thing.body.immovable = true
         this.thing.body.onOverlap = true
         this.thing.anims.play('thing-calm')
@@ -52,7 +44,7 @@ class Play extends Phaser.Scene {
         this.ex.body.onOverlap = true
         this.ex.anims.play('ex')
         // ex collision config
-        this.oh = this.physics.add.sprite(width-50, ((height-55)/4)*3, 'ohCharacter', 1)
+        this.oh = this.physics.add.sprite(width-50, ((height-55)/4)*3, 'ohCharacter0', 1)
         this.oh.body.setCircle(this.ex.width/2)
         this.oh.body.onOverlap = true
         this.oh.anims.play('oh')
@@ -101,10 +93,17 @@ class Play extends Phaser.Scene {
         } else {
             this.player.setAccelerationX(-this.ACCELERATION*.2)
         }
-        if(cursors.space.isDown) {
-            this.player.x += 20
-        } else if(cursors.shift.isDown) {
-            this.player.x -= 20
+        // no just down property for cursors, handle teleportation (not sure I like this)
+        if(Phaser.Input.Keyboard.JustDown(cursors.space)) {
+            this.player.x += 200
+            this.player.setAccelerationY(0)
+            this.player.setAccelerationX(0)
+            // burst forward animation
+        } else if(Phaser.Input.Keyboard.JustDown(cursors.shift)) {
+            this.player.x -= 200
+            this.player.setAccelerationY(0)
+            this.player.setAccelerationX(0)
+            // burst backward animation
         }
 
         // detecting collisions
@@ -115,9 +114,14 @@ class Play extends Phaser.Scene {
         var overlapOhPlayer = this.physics.overlap(this.player, this.oh)
         if(!overlapThingPlayer && !overlapExPlayer && !overlapOhPlayer) {
             this.message.text = 'Awaiting physics world events...';
+        } else if(overlapExPlayer) {
+            this.exParticles()
+        } else if(overlapOhPlayer) {
+            this.ohParticlesEmpty()
         }
         if(collideEnemyPlayer) {
-            this.ohParticles()
+            this.ohParticlesFilled()
+            this.ohParticlesEmpty()
         }
     }
 
@@ -127,7 +131,7 @@ class Play extends Phaser.Scene {
         this.enemyGroup.add(enemy)
     }
 
-    ohParticles() {
+    ohParticlesFilled() {
         // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
         this.add.particles(this.player.x, this.player.y, 'circleFilled', {
             gravityX: -2000,
@@ -136,11 +140,26 @@ class Play extends Phaser.Scene {
             maxParticles: 10,
             blendMode: 'ADD'
         })
+    }
+
+    ohParticlesEmpty() {
+        // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
         this.add.particles(this.player.x, this.player.y, 'circleEmpty', {
             gravityX: -1500,
             speed: 150,
             lifespan: 10000,
             maxParticles: 10,
+            blendMode: 'ADD'
+        })
+    }
+
+    exParticles() {
+        // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
+        this.add.particles(this.player.x, this.player.y, 'exParticle', {
+            gravityX: -2000,
+            speed: 100,
+            lifespan: 10000,
+            maxParticles: 20,
             blendMode: 'ADD'
         })
     }

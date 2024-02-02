@@ -29,7 +29,15 @@ class Load extends Phaser.Scene {
             frameWidth: 35,
             frameHeight: 35
         })
-        this.load.spritesheet('ohCharacter', './assets/ohCharacter.png', {
+        this.load.spritesheet('ohCharacter0', './assets/ohCharacter0.png', {
+            frameWidth: 35,
+            frameHeight: 35
+        })
+        this.load.spritesheet('ohCharacter1', './assets/ohCharacter1.png', {
+            frameWidth: 35,
+            frameHeight: 35
+        })
+        this.load.spritesheet('ohCharacter2', './assets/ohCharacter2.png', {
             frameWidth: 35,
             frameHeight: 35
         })
@@ -40,6 +48,7 @@ class Load extends Phaser.Scene {
         this.load.image('background', './assets/background.png')
         this.load.image('circleEmpty', '/assets/circleEmpty.png')
         this.load.image('circleFilled', '/assets/circleFilled.png')
+        this.load.image('exParticle', './assets/exParticle.png')
     }
 
     create() {
@@ -83,7 +92,7 @@ class Load extends Phaser.Scene {
         // oh animation config
         this.anims.create({
             key: 'oh',
-            frames: this.anims.generateFrameNames('ohCharacter', { start: 0, end: 0 }),
+            frames: this.anims.generateFrameNames('ohCharacter0', { start: 0, end: 0 }),
             frameRate: 0,
             repeat: -1
         })
