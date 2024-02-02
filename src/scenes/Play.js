@@ -10,6 +10,7 @@ class Play extends Phaser.Scene {
         this.DRAG = .05
         this.BOUNCE = .7
         this.SPEED = 4
+        this.ENEMY_SPEED = -800
         this.DELAY = 2000
     }
 
@@ -46,13 +47,6 @@ class Play extends Phaser.Scene {
         this.oh.body.setCircle(this.ex.width/2)
         this.oh.body.onOverlap = true
         this.oh.anims.play('oh')
-        
-        // enemy collision config
-        //this.enemy = this.physics.add.sprite(width-50, height/2, 'enemyCharacter', 1)
-        //this.enemy.body.setCircle(this.enemy.width/2)
-        //this.enemy.body.setImmovable(true)
-        //this.enemy.body.onCollide = true
-        //this.enemy.anims.play('enemy')
         
         // enemy group config
         // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
@@ -111,7 +105,7 @@ class Play extends Phaser.Scene {
 
     addEnemy() {
         // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
-        let enemy = new Enemy(this, this.SPEED)
+        let enemy = new Enemy(this, this.ENEMY_SPEED)
         this.enemyGroup.add(enemy)
     }
 }

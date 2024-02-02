@@ -1,6 +1,6 @@
 class Enemy extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, velocityX) {
-        super(scene, velocityX)
+        super(scene, width+70, Phaser.Math.Between(height-70, 70), 'enemyCharacter')
 
         this.scene.add.existing(this)
         this.scene.physics.add.existing(this)
@@ -11,19 +11,13 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.body.onCollide = true
         this.anims.play('enemy')
 
-        //this.enemy = this.physics.add.sprite(width-50, height/2, 'enemyCharacter', 1)
-        //this.enemy.body.setCircle(this.enemy.width/2)
-        //this.enemy.body.setImmovable(true)
-        //this.enemy.body.onCollide = true
-        //this.enemy.anims.play('enemy')
-
         this.new = true
     }
 
     update() {
         // When the first enemy is almost gone, throw in a new one
         // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
-        if(this.new && this.x <= width*.75) {
+        if(this.new && this.x <= width/4) {
             this.scene.addEnemy(this.parent, this.velocityX)
             this.new = false
         }
