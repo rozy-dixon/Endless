@@ -33,7 +33,7 @@ class Play extends Phaser.Scene {
         this.player.body.onOverlap = true
         this.player.anims.play('neutral')
         // thing collision config
-        this.thing = this.physics.add.sprite(0, 0, 'thing', 1).setOrigin(0, 0)
+        this.thing = this.physics.add.sprite(-175, 0, 'thing', 1).setOrigin(0, 0)
         this.thing.body.immovable = true
         this.thing.body.onOverlap = true
         this.thing.anims.play('thing-calm')
@@ -75,6 +75,7 @@ class Play extends Phaser.Scene {
     update() {
         this.background.tilePositionX += this.SPEED
         // handle input
+        // the goal here is responsive, yet fluid, running with the current
         if(cursors.up.isDown) {
             this.player.body.setAccelerationY(-this.ACCELERATION)
         }
@@ -94,12 +95,15 @@ class Play extends Phaser.Scene {
 
         // detecting collisions
         // https://github.com/nathanaltice/BigBodies used as reference
-        this.physics.collide(this.player, this.enemyGroup)
+        var collideEnemyPlayer = this.physics.collide(this.player, this.enemyGroup)
         var overlapThingPlayer = this.physics.overlap(this.player, this.thing)
         var overlapExPlayer = this.physics.overlap(this.player, this.ex)
         var overlapOhPlayer = this.physics.overlap(this.player, this.oh)
-        if (!overlapThingPlayer && !overlapExPlayer && !overlapOhPlayer) {
+        if(!overlapThingPlayer && !overlapExPlayer && !overlapOhPlayer) {
             this.message.text = 'Awaiting physics world events...';
+        }
+        if(collideEnemyPlayer) {
+            this.ohParticles()
         }
     }
 
@@ -107,5 +111,24 @@ class Play extends Phaser.Scene {
         // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
         let enemy = new Enemy(this, this.ENEMY_SPEED)
         this.enemyGroup.add(enemy)
+    }
+
+    ohParticles() {
+        this.add.particles(this.player.x, this.player.y, 'circleFilled', {
+            gravityX: -2000,
+            //scale: { start: 1, end: 0.1 },
+            speed: 100,
+            lifespan: 10000,
+            maxParticles: 10,
+            blendMode: 'ADD'
+        })
+        this.add.particles(this.player.x, this.player.y, 'circleEmpty', {
+            gravityX: -1500,
+            //scale: { start: 1, end: 0.1 },
+            speed: 150,
+            lifespan: 10000,
+            maxParticles: 10,
+            blendMode: 'ADD'
+        })
     }
 }

@@ -38,6 +38,8 @@ class Load extends Phaser.Scene {
             frameHeight: 700
         })
         this.load.image('background', './assets/background.png')
+        this.load.image('circleEmpty', '/assets/circleEmpty.png')
+        this.load.image('circleFilled', '/assets/circleFilled.png')
     }
 
     create() {

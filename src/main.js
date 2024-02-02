@@ -14,7 +14,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true
+            //debug: true
         }
     },
     scene: [ Load, Title, Menu, Play ]
@@ -23,8 +23,6 @@ const game = new Phaser.Game(config)
 const { width, height } = game.config
 let cursors
 
-// [ ] Ask about drag
-// [ ] Ask about making prefabs
 // [ ] Ask about normalizing
 // [ ] Ask about the loading bar
 // [ ] scene transition (game.renderer.snapshot)
