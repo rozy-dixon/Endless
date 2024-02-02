@@ -8,16 +8,20 @@ class Play extends Phaser.Scene {
         this.ACCELERATION = 3000
         this.MAX_VELOCITY = 1000
         this.DRAG = .05
-        this.BOUNCE = .7
+        this.BOUNCE = .5
         this.SPEED = 4
         this.ENEMY_SPEED = -800
-        this.DELAY = 2000
+        this.DELAY = 3000
     }
 
     create() {
         console.log("PLAY SCENE! YIPPPEEEEE!!") // just checking :)
         // set background
-        this.background = this.add.tileSprite(0, 0, 980, 700, 'background').setOrigin(0, 0)
+        this.background = this.add.tileSprite(0, 0, 980, 755, 'background').setOrigin(0, 0)
+        const graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xFFFFFF }, fillStyle: { color: 0xFFFFFF }})
+        const emptyBarUI = new Phaser.Geom.Rectangle(width/2, 100, 400, 35)
+        graphics.strokeRectShape(emptyBarUI)
+
 
         // COLLISION CONFIG
         // https://github.com/nathanaltice/BigBodies used as reference
@@ -92,6 +96,9 @@ class Play extends Phaser.Scene {
         } else {
             this.player.setAccelerationX(-this.ACCELERATION*.2)
         }
+        if(cursors.space.isDown) {
+            this.player.x += 20
+        }
 
         // detecting collisions
         // https://github.com/nathanaltice/BigBodies used as reference
@@ -114,9 +121,9 @@ class Play extends Phaser.Scene {
     }
 
     ohParticles() {
+        // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
         this.add.particles(this.player.x, this.player.y, 'circleFilled', {
             gravityX: -2000,
-            //scale: { start: 1, end: 0.1 },
             speed: 100,
             lifespan: 10000,
             maxParticles: 10,
@@ -124,7 +131,6 @@ class Play extends Phaser.Scene {
         })
         this.add.particles(this.player.x, this.player.y, 'circleEmpty', {
             gravityX: -1500,
-            //scale: { start: 1, end: 0.1 },
             speed: 150,
             lifespan: 10000,
             maxParticles: 10,

@@ -25,7 +25,7 @@ class Load extends Phaser.Scene {
             frameWidth: 70,
             frameHeight: 70
         })
-        this.load.spritesheet('exCharacter', './assets/exCharacter1.png', {
+        this.load.spritesheet('exCharacter', './assets/exCharacter.png', {
             frameWidth: 35,
             frameHeight: 35
         })
