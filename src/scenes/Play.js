@@ -30,11 +30,18 @@ class Play extends Phaser.Scene {
 
         // COLLISION CONFIG
         // https://github.com/nathanaltice/BigBodies used as reference
-        this.player = new Player(this)
+        this.player = this.physics.add.sprite(width/2, (height-55)/2, 'playerCharacter', 1)
+        this.player.body.setCollideWorldBounds(true)
+        this.player.setBounce(this.BOUNCE)
+        this.player.body.setCircle(this.player.width/2) // While tiles are typically square, I chose to use a circular body. ->
+        this.player.setMaxVelocity(this.MAX_VELOCITY)   // I wanted the player to have a little wiggle room considering ->
+        this.player.setDamping(true)                    // the sprite is both a little unconventional and less visually stable.
+        this.player.setDrag(this.DRAG)
         this.player.body.onCollide = true
         this.player.body.onOverlap = true
+        this.player.anims.play('neutral')
         // thing collision config
-        this.thing = this.physics.add.sprite(0, 0, 'thing', 1).setOrigin(0, 0)
+        this.thing = this.physics.add.sprite(-width+35, 0, 'thing', 1).setOrigin(0, 0)
         this.thing.body.immovable = true
         this.thing.body.onOverlap = true
         this.thing.anims.play('thing-calm')

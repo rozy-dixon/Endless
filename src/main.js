@@ -38,3 +38,5 @@ let cursors
 // [ ] display lives
 // [ ] Ask about tracking the particles as they fall into the thing????
 // [ ] Limit teleportation
+// [ ] damping
+// [ ] make it so particles don't go to the UI box

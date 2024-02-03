@@ -42,7 +42,7 @@ class Load extends Phaser.Scene {
             frameHeight: 35
         })
         this.load.spritesheet('thing', './assets/spritesheets/thing.png', {
-            frameWidth: 210,
+            frameWidth: 980,
             frameHeight: 700
         })
         this.load.image('background', './assets/background.png')
@@ -67,12 +67,6 @@ class Load extends Phaser.Scene {
             key: 'thing-calm',
             frames: this.anims.generateFrameNames('thing', { start: 0, end: 3 }),
             frameRate: 5,
-            repeat: -1
-        })
-        this.anims.create({
-            key: 'thing-agitated',
-            frames: this.anims.generateFrameNames('thing', { start: 0, end: 3 }),
-            frameRate: 15,
             repeat: -1
         })
         // enemy animation config
