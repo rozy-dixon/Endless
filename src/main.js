@@ -32,7 +32,6 @@ let cursors
 // [ ] Ask about normalizing
 // [ ] Ask about the loading bar
 // [ ] scene transition (game.renderer.snapshot)
-// [X] bounce player from edge of screen and enemy
 // [ ] store hi-score
 // [ ] display keys as pressed
 // [ ] display lives
@@ -40,3 +39,5 @@ let cursors
 // [ ] Limit teleportation
 // [ ] damping
 // [ ] make it so particles don't go to the UI box
+// [ ] forward and backward animations
+// [ ] check fsm for narmalizing and shirt+space

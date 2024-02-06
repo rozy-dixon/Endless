@@ -29,15 +29,11 @@ class Load extends Phaser.Scene {
             frameWidth: 35,
             frameHeight: 35
         })
-        this.load.spritesheet('ohCharacter0', './assets/ohCharacter0.png', {
+        this.load.spritesheet('ohCharacterGreen', './assets/ohCharacterGreen.png', {
             frameWidth: 35,
             frameHeight: 35
         })
-        this.load.spritesheet('ohCharacter1', './assets/ohCharacter1.png', {
-            frameWidth: 35,
-            frameHeight: 35
-        })
-        this.load.spritesheet('ohCharacter2', './assets/ohCharacter2.png', {
+        this.load.spritesheet('ohCharacterWhite', './assets/ohCharacterWhite.png', {
             frameWidth: 35,
             frameHeight: 35
         })
@@ -74,20 +70,6 @@ class Load extends Phaser.Scene {
             key: 'enemy',
             frames: this.anims.generateFrameNames('enemyCharacter', { start: 0, end: 13 }),
             frameRate: 10,
-            repeat: -1
-        })
-        // ex animation config
-        this.anims.create({
-            key: 'ex',
-            frames: this.anims.generateFrameNames('exCharacter', { start: 0, end: 0 }),
-            frameRate: 0,
-            repeat: -1
-        })
-        // oh animation config
-        this.anims.create({
-            key: 'oh',
-            frames: this.anims.generateFrameNames('ohCharacter0', { start: 0, end: 0 }),
-            frameRate: 0,
             repeat: -1
         })
 
