@@ -21,12 +21,6 @@ class Play extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, 980, 755, 'background').setOrigin(0, 0)
 
         // COLLISION CONFIG
-        // https://github.com/nathanaltice/BigBodies used as reference
-        // thing collision config
-        this.thing = this.physics.add.sprite(-width+35, 0, 'thing', 1).setOrigin(0, 0)
-        this.thing.body.immovable = true
-        this.thing.body.onOverlap = true
-        this.thing.anims.play('thing-calm')
         // player collision config
         this.player = this.physics.add.sprite(width/2, (height-55)/2, 'playerCharacter', 1)
         this.player.body.setCollideWorldBounds(true)
@@ -38,7 +32,6 @@ class Play extends Phaser.Scene {
         this.player.body.onCollide = true
         this.player.body.onOverlap = true
         this.player.anims.play('neutral')
-        
         // enemy group config
         // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
         this.enemyGroup = this.add.group({
@@ -47,7 +40,13 @@ class Play extends Phaser.Scene {
         this.time.delayedCall(this.DELAY, () => {
             this.addEnemy() 
         })
-        // https://phaser.discourse.group/t/call-to-timer-methods-not-working/7095/7 used as reference
+        // ex config
+        this.ex = new Ex(this)
+        // thing collision config
+        this.thing = this.physics.add.sprite(35, 0, 'thing', 1).setOrigin(1, 0)
+        this.thing.body.immovable = true
+        this.thing.body.onOverlap = true
+        this.thing.anims.play('thing-calm')
 
         // define cursors
         cursors = this.input.keyboard.createCursorKeys()
@@ -71,9 +70,9 @@ class Play extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, width, height-55, true, true, true, true)
         const whiteStroke = this.add.graphics({ lineStyle: { width: 3, color: 0xF6F0DD }, fillStyle: { color: 0x000000 }})
         this.whiteFill = this.add.graphics({ lineStyle: { width: 0, color: 0xF6F0DD }, fillStyle: { color: 0xF6F0DD }})
-        const emptyBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2), 710, 470, 35)
+        const emptyBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2), 710, 485, 35)
         whiteStroke.strokeRectShape(emptyBarUI)
-        this.scoreBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2)+5, 715, this.score, 25)
+        this.scoreBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2)+5, 715, this.score, 25)   // max size: 472.5
         this.whiteFill.fillRectShape(this.scoreBarUI)
     }
 
@@ -103,14 +102,22 @@ class Play extends Phaser.Scene {
         // detecting collisions
         // https://github.com/nathanaltice/BigBodies used as reference
         var overlapThingPlayer = this.physics.overlap(this.player, this.thing)
-        var collideEnemyPlayer = this.physics.collide(this.player, this.enemyGroup)
+        //var collideEnemyPlayer = this.physics.collide(this.player, this.enemyGroup)
+        //var collideExPlayer = this.physics.collide(this.player, this.ex)
         if(!overlapThingPlayer) {
             this.message.text = 'Awaiting physics world events...'
         }
-        if(collideEnemyPlayer) {
+        if(this.physics.collide(this.player, this.enemyGroup)) {
             this.ohParticlesFilled()
             this.ohParticlesEmpty()
             this.handleScoreAdd()
+        }
+        if(this.physics.collide(this.player, this.ex)) {
+            this.handleScoreSubtract()
+        }
+        // moving the thing
+        if(this.score%35 == 0 || this.score == 0) {
+            this.thing.x = ((this.score/35)*35)+35
         }
     }
 
@@ -121,25 +128,22 @@ class Play extends Phaser.Scene {
     }
 
     handleScoreAdd() {
-        if(this.score >= 0 && this.score <= 455) {
+        if(this.score >= 0 && this.score <= width-35) {
+            this.score += 5
             this.scoreText.text = this.score
-            this.score+=5
             // https://phaser.io/examples/v3/category/geom/rectangle used as reference
-            this.scoreBarUI.width = this.score
+            this.scoreBarUI.width = this.score/2
             this.whiteFill.clear()
             this.whiteFill.fillRectShape(this.scoreBarUI)
-            if(this.score%35 == 0) {
-                this.thing.x += 35
-            }
         }
-        // 28 levels
     }
 
     handleScoreSubtract() {
-        if(this.score < 455) {
-            this.score--
+        if(this.score >= 5 && this.score < width-35) {
+            this.score -= 5
+            this.scoreText.text = this.score
             // https://phaser.io/examples/v3/category/geom/rectangle used as reference
-            this.scoreBarUI.width = this.score
+            this.scoreBarUI.width = this.score/2
             this.whiteFill.clear()
             this.whiteFill.fillRectShape(this.scoreBarUI)
         }

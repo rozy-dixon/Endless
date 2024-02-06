@@ -16,35 +16,27 @@ class Load extends Phaser.Scene {
             loadingBar.destroy()
         })
 
-        // load spritesheets, images, sound, and font
-        this.load.spritesheet('playerCharacter', './assets/spritesheets/playerCharacter.png', {
-            frameWidth: 35,
-            frameHeight: 35
-        })  // the playerCharacter sprite is inspired by all-caps futura, but is not faithful to it
-        this.load.spritesheet('enemyCharacter', './assets/spritesheets/enemyCharacter.png', {   // temp
-            frameWidth: 70,
-            frameHeight: 70
-        })
-        this.load.spritesheet('exCharacter', './assets/exCharacter.png', {
-            frameWidth: 35,
-            frameHeight: 35
-        })
-        this.load.spritesheet('ohCharacterGreen', './assets/ohCharacterGreen.png', {
-            frameWidth: 35,
-            frameHeight: 35
-        })
-        this.load.spritesheet('ohCharacterWhite', './assets/ohCharacterWhite.png', {
-            frameWidth: 35,
-            frameHeight: 35
-        })
-        this.load.spritesheet('thing', './assets/spritesheets/thing.png', {
-            frameWidth: 980,
-            frameHeight: 700
-        })
-        this.load.image('background', './assets/background.png')
-        this.load.image('circleEmpty', '/assets/circleEmpty.png')
-        this.load.image('circleFilled', '/assets/circleFilled.png')
-        this.load.image('exParticle', './assets/exParticle.png')
+        // load spritesheets
+        // all-caps futura was used as reference for playerCharacter sprite, but loosely (the main goal was to fill out each tile)
+        this.load.spritesheet('playerCharacter', './assets/spritesheets/playerCharacter.png', { frameWidth: 35, frameHeight: 35 })
+        this.load.spritesheet('enemyCharacter', './assets/spritesheets/enemyCharacter.png', { frameWidth: 70, frameHeight: 70 })
+        this.load.spritesheet('thing', './assets/spritesheets/thing.png', { frameWidth: 980, frameHeight: 700 })
+        this.load.spritesheet('horizontal', './assets/spritesheets/horizontal.png', { frameWidth: 980, frameHeight: 35 })
+        this.load.spritesheet('vertical', './assets/spritesheets/vertical.png', { frameWidth: 35, frameHeight: 700 })
+        // ex, oh, and square (cross prep) loaded as spritesheets incase I want to add animations
+        this.load.spritesheet('exCharacter', './assets/exCharacter.png', { frameWidth: 35, frameHeight: 35 })
+        this.load.spritesheet('ohCharacterGreen', './assets/ohCharacterGreen.png', { frameWidth: 35, frameHeight: 35 })
+        this.load.spritesheet('ohCharacterWhite', './assets/ohCharacterWhite.png', { frameWidth: 35, frameHeight: 35 })
+        this.load.spritesheet('crossPrep', './assets/crossPrep.png', { frameWidth: 35, frameHeight: 35 })
+        // load images
+        this.load.image('background', './assets/background.png')        // scrolling background
+        this.load.image('circleEmpty', '/assets/circleEmpty.png')       // empty circle particle
+        this.load.image('circleFilled', '/assets/circleFilled.png')     // filled circle particle
+        this.load.image('exParticle', './assets/exParticle.png')        // ex particle
+        this.load.image('keyDown', './assets/keyDown.png')              // KEYS ->
+        this.load.image('keyLeft', './assets/keyLeft.png')
+        this.load.image('keyRight', './assets/keyRight.png')
+        this.load.image('keyUp', './assets/keyUp.png')
     }
 
     create() {
@@ -65,10 +57,29 @@ class Load extends Phaser.Scene {
             frameRate: 5,
             repeat: -1
         })
+        this.anims.create({
+            key: 'thing-agitated',
+            frames: this.anims.generateFrameNames('thing', { start: 0, end: 3 }),
+            frameRate: 20,
+            repeat: -1
+        })
         // enemy animation config
         this.anims.create({
             key: 'enemy',
             frames: this.anims.generateFrameNames('enemyCharacter', { start: 0, end: 13 }),
+            frameRate: 10,
+            repeat: -1
+        })
+        // vertical and horizontal animation config
+        this.anims.create({ 
+            key: 'horizontal-active', 
+            frames: this.anims.generateFrameNames('horizontal', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        })
+        this.anims.create({ 
+            key: 'vertical-active', 
+            frames: this.anims.generateFrameNames('vertical', { start: 0, end: 3 }),
             frameRate: 10,
             repeat: -1
         })
