@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
         this.BOUNCE = .5
         this.SPEED = 4
         this.ENEMY_VELOCITY = -800
+        this.OH_VELOCITY = 150
         this.DELAY = 3000
     }
 
@@ -21,6 +22,11 @@ class Play extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, 980, 755, 'background').setOrigin(0, 0)
 
         // COLLISION CONFIG
+        // thing collision config
+        this.thing = this.physics.add.sprite(35, 0, 'thing', 1).setOrigin(1, 0)
+        this.thing.body.immovable = true
+        this.thing.body.onOverlap = true
+        this.thing.anims.play('thing-calm')
         // player collision config
         this.player = this.physics.add.sprite(width/2, (height-55)/2, 'playerCharacter', 1)
         this.player.body.setCollideWorldBounds(true)
@@ -42,12 +48,12 @@ class Play extends Phaser.Scene {
         })
         // ex config
         this.ex = new Ex(this)
-        // thing collision config
-        this.thing = this.physics.add.sprite(35, 0, 'thing', 1).setOrigin(1, 0)
-        this.thing.body.immovable = true
-        this.thing.body.onOverlap = true
-        this.thing.anims.play('thing-calm')
-
+        // oh config
+        this.ohGroup = this.add.group({
+            runChildUpdate: true
+        })
+        this.addOhGroup()
+        //this.oh = new Oh(this, width/2, height/2, 1, this.OH_VELOCITY)
         // define cursors
         cursors = this.input.keyboard.createCursorKeys()
         this.message = this.add.text(width/2, 35, 'Awaiting physics world events...').setOrigin(0.5)
@@ -89,22 +95,15 @@ class Play extends Phaser.Scene {
         // no just down property for cursors, handle teleportation (not sure I like this)
         if(Phaser.Input.Keyboard.JustDown(cursors.space)) {
             this.player.x += 200
-            this.player.setAccelerationY(0)
-            this.player.setAccelerationX(0)
             // burst forward animation
         } else if(Phaser.Input.Keyboard.JustDown(cursors.shift)) {
             this.player.x -= 200
-            this.player.setAccelerationY(0)
-            this.player.setAccelerationX(0)
             // burst backward animation
         }
 
         // detecting collisions
         // https://github.com/nathanaltice/BigBodies used as reference
-        var overlapThingPlayer = this.physics.overlap(this.player, this.thing)
-        //var collideEnemyPlayer = this.physics.collide(this.player, this.enemyGroup)
-        //var collideExPlayer = this.physics.collide(this.player, this.ex)
-        if(!overlapThingPlayer) {
+        if(!(this.physics.overlap(this.player, this.thing))) {
             this.message.text = 'Awaiting physics world events...'
         }
         if(this.physics.collide(this.player, this.enemyGroup)) {
@@ -112,9 +111,16 @@ class Play extends Phaser.Scene {
             this.ohParticlesEmpty()
             this.handleScoreAdd()
         }
+        if(this.physics.collide(this.player, this.ohGroup)) {
+            this.ohParticlesEmpty()
+            this.handleScoreAdd()
+        }
         if(this.physics.collide(this.player, this.ex)) {
             this.handleScoreSubtract()
+            this.exParticles()
+            this.ex.move()
         }
+
         // moving the thing
         if(this.score%35 == 0 || this.score == 0) {
             this.thing.x = ((this.score/35)*35)+35
@@ -125,6 +131,26 @@ class Play extends Phaser.Scene {
         // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
         let enemy = new Enemy(this, this.ENEMY_VELOCITY)
         this.enemyGroup.add(enemy)
+    }
+
+    addOh() {
+        let ohX = Phaser.Math.Between(35, width-35)
+        let ohY = Phaser.Math.Between(35, height-55-35)
+        for (let i = 1; i <= 8; i++) {
+            let oh = new Oh(this, ohX, ohY, i, this.OH_VELOCITY)
+            this.ohGroup.add(oh)
+        }
+    }
+
+    addOhGroup() {
+        this.time.addEvent({
+            // https://stackoverflow.com/questions/56301294/how-do-i-loop-the-function-callback-with-a-random-delay-in-phaser-3
+            // used as reference
+            delay: this.DELAY,  
+            loop: true, 
+            callback: this.addOh, 
+            callbackScope: this 
+        })
     }
 
     handleScoreAdd() {
@@ -152,7 +178,6 @@ class Play extends Phaser.Scene {
     // PARTICLE EFFECTS
 
     ohParticlesFilled() {
-        // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
         this.add.particles(this.player.x, this.player.y, 'circleFilled', {
             gravityX: -2000,
             speed: 100,
@@ -163,7 +188,6 @@ class Play extends Phaser.Scene {
     }
 
     ohParticlesEmpty() {
-        // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
         this.add.particles(this.player.x, this.player.y, 'circleEmpty', {
             gravityX: -1500,
             speed: 150,
@@ -174,7 +198,6 @@ class Play extends Phaser.Scene {
     }
 
     exParticles() {
-        // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
         this.add.particles(this.player.x, this.player.y, 'exParticle', {
             gravityX: -2000,
             speed: 100,
