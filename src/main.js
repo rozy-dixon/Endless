@@ -5,12 +5,6 @@
 //     to feel like they were being drawn backwards and I feel like I was able to balance that and player control.
 // Visual creative tilt: I wanted to try and make very convensional tiles, but to use them in an unconventional way. I was inspired by
 //     this image https://twitter.com/lootbndt/status/1515811010904473607?s=12&t=n20BpP6zux0w-ImiGmqAnA made by @LootBndt on Twitter/X.
-// Rules:
-// - the more particles it eats, the bigger it becomes. 
-// - colliding with enemies bounces you and produces particles.
-// - hitting ohs produces particles.
-// - hitting exes produces ex particles, which counteract the particles the thing has eaten.
-// - spending x amount of time in the thing kills you.
 
 let config = {
     parent: 'endlessRunner',
@@ -20,7 +14,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true
+            //debug: true
         }
     },
     scene: [ Load, Title, Menu, Play ]

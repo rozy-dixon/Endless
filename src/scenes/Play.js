@@ -13,6 +13,7 @@ class Play extends Phaser.Scene {
         this.ENEMY_VELOCITY = -800
         this.OH_VELOCITY = 150
         this.DELAY = 3000
+        this.LEVEL = 0
     }
 
     create() {
@@ -52,14 +53,12 @@ class Play extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys()
         this.message = this.add.text(width/2, 35, 'Awaiting physics world events...').setOrigin(0.5)
 
-        // tracking collisions visually
-        // https://github.com/nathanaltice/BigBodies used as reference
-        this.physics.world.on('overlap', (obj1, obj2, body1, body2)=>{
-            if (obj1 == this.player && obj2 == this.thing) {
-                this.message.text = `EVACUATE.`
-            } else {
-                this.message.text = `${obj1.texture.key} body is overlapping ${obj2.texture.key} body`
-            }
+        // Timer
+        this.timer = this.time.addEvent({
+            delay: this.DELAY,
+            loop: true,
+            callback: this.levelUp,
+            callbackScope: this
         })
 
         // UI CONFIG
@@ -81,27 +80,12 @@ class Play extends Phaser.Scene {
 
     update() {
         this.background.tilePositionX += this.SPEED
-        // handle input
-        // the goal here is responsive, yet fluid, running with the current
-        if(cursors.up.isDown) { this.player.body.setAccelerationY(-this.ACCELERATION) }             // move up
-        if(cursors.down.isDown) { this.player.body.setAccelerationY(this.ACCELERATION) }            // move down
-        if(!cursors.up.isDown && !cursors.down.isDown) { this.player.setAccelerationY(0) }          // not moving up or down
-        if(cursors.left.isDown) { this.player.body.setAccelerationX(-this.ACCELERATION) }           // move left
-        else if (cursors.right.isDown) { this.player.body.setAccelerationX(this.ACCELERATION*.2) }  // move right
-        else { this.player.setAccelerationX(-this.ACCELERATION*.2) }                                // not moving left or right
-        // no just down property for cursors, handle teleportation (not sure I like this)
-        if(Phaser.Input.Keyboard.JustDown(cursors.space)) {
-            this.player.x += 200
-            // burst forward animation
-        } else if(Phaser.Input.Keyboard.JustDown(cursors.shift)) {
-            this.player.x -= 200
-            // burst backward animation
-        }
 
         // detecting collisions
         // https://github.com/nathanaltice/BigBodies used as reference
-        if(!(this.physics.overlap(this.player, this.thing))) {
-            this.message.text = 'Awaiting physics world events...'
+        var slow = false
+        if(this.physics.overlap(this.player, this.thing)) {
+            slow = true
         }
         if(this.physics.collide(this.player, this.enemyGroup)) {
             this.ohParticlesFilled()
@@ -118,11 +102,44 @@ class Play extends Phaser.Scene {
             this.ex.move()
         }
 
+        // handle input
+        // the goal here is responsive, yet fluid, running with the current
+        // I know this is horrifying. I'm sorry
+        if(cursors.up.isDown && !slow) { this.player.body.setAccelerationY(-this.ACCELERATION) }            // move up
+        else if(cursors.up.isDown && slow) { this.player.body.setAccelerationY(-this.ACCELERATION/2) }
+        if(cursors.down.isDown && !slow) { this.player.body.setAccelerationY(this.ACCELERATION) }           // move down
+        else if(cursors.down.isDown && slow) { this.player.body.setAccelerationY(this.ACCELERATION/2) }
+        if(!cursors.up.isDown && !cursors.down.isDown) { this.player.setAccelerationY(0) }                  // not moving up or down
+        if(cursors.left.isDown && !slow) { this.player.body.setAccelerationX(-this.ACCELERATION) }          // move left
+        else if(cursors.left.isDown && slow) { this.player.body.setAccelerationX(-this.ACCELERATION/2) }
+        else if (cursors.right.isDown && !slow) { this.player.body.setAccelerationX(this.ACCELERATION*.2) } // move right
+        else if (cursors.right.isDown && slow) { this.player.body.setAccelerationX((this.ACCELERATION*.2)/2) }
+        else { this.player.setAccelerationX(-this.ACCELERATION*.2) }                                        // not moving left or right
+        // no just down property for cursors, handle teleportation (not sure I like this)
+        if(Phaser.Input.Keyboard.JustDown(cursors.space)) {
+            this.player.x += 200
+            // burst forward animation
+        } else if(Phaser.Input.Keyboard.JustDown(cursors.shift)) {
+            this.player.x -= 200
+            // burst backward animation
+        }
+
         // moving the thing
         if(this.score%35 == 0 || this.score == 0) {
             this.thing.x = ((this.score/35)*35)+35
         }
     }
+
+    levelUp() {
+        this.LEVEL++
+        if(this.LEVEL%5 == 0) {
+            this.SPEED += .5
+            this.OH_VELOCITY += 20
+            this.ENEMY_VELOCITY -= 15
+        }
+    }
+
+    // HANDLE ENEMIES
 
     addEnemy() {
         // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
@@ -141,8 +158,6 @@ class Play extends Phaser.Scene {
 
     addOhGroup() {
         this.time.addEvent({
-            // https://stackoverflow.com/questions/56301294/how-do-i-loop-the-function-callback-with-a-random-delay-in-phaser-3
-            // used as reference
             delay: this.DELAY,  
             loop: true, 
             callback: this.addOh, 
