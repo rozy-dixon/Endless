@@ -40,20 +40,14 @@ class Play extends Phaser.Scene {
         this.player.anims.play('neutral')
         // enemy group config
         // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
-        this.enemyGroup = this.add.group({
-            runChildUpdate: true
-        })
-        this.time.delayedCall(this.DELAY, () => {
-            this.addEnemy() 
-        })
+        this.enemyGroup = this.add.group({ runChildUpdate: true })
+        this.time.delayedCall(this.DELAY, () => { this.addEnemy() })
         // ex config
         this.ex = new Ex(this)
         // oh config
-        this.ohGroup = this.add.group({
-            runChildUpdate: true
-        })
+        this.ohGroup = this.add.group({ runChildUpdate: true })
         this.addOhGroup()
-        //this.oh = new Oh(this, width/2, height/2, 1, this.OH_VELOCITY)
+        
         // define cursors
         cursors = this.input.keyboard.createCursorKeys()
         this.message = this.add.text(width/2, 35, 'Awaiting physics world events...').setOrigin(0.5)
@@ -74,8 +68,11 @@ class Play extends Phaser.Scene {
         this.scoreText = this.add.text(width/2, height-60, 'Awaiting physics world events...').setOrigin(0.5)
         this.score = 0
         this.physics.world.setBounds(0, 0, width, height-55, true, true, true, true)
-        const whiteStroke = this.add.graphics({ lineStyle: { width: 3, color: 0xF6F0DD }, fillStyle: { color: 0x000000 }})
-        this.whiteFill = this.add.graphics({ lineStyle: { width: 0, color: 0xF6F0DD }, fillStyle: { color: 0xF6F0DD }})
+        const blackFill = this.add.graphics({ fillStyle: { color: 0x101010 } })
+        const whiteStroke = this.add.graphics({ lineStyle: { width: 3, color: 0xF6F0DD }, fillStyle: { color: 0x000000 } })
+        this.whiteFill = this.add.graphics({ lineStyle: { width: 0, color: 0xF6F0DD }, fillStyle: { color: 0xF6F0DD } })
+        const blackBoxUI = new Phaser.Geom.Rectangle(0, 700, width, 55)
+        blackFill.fillRectShape(blackBoxUI)
         const emptyBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2), 710, 485, 35)
         whiteStroke.strokeRectShape(emptyBarUI)
         this.scoreBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2)+5, 715, this.score, 25)   // max size: 472.5
@@ -152,6 +149,28 @@ class Play extends Phaser.Scene {
             callbackScope: this 
         })
     }
+
+    addCross() {
+        let horizontalY = Phaser.Math.Between(35, height-55-35)
+        let verticalX = Phaser.Math.Between(35, width-35)
+        this.time.delayedCall(4000, () => {
+            let horizontal = new Horizontal(this, horizontalY)
+            let vertical = new Vertical(this, verticalX)
+            this.crossGroup.add(horizontal)
+            this.crossGroup.add(vertical)
+        })
+    }
+
+    addCrossGroup() {
+        this.time.addEvent({
+            delay: this.DELAY+4000,
+            loop: true,
+            callback: this.addCross,
+            callbackScope: this
+        })
+    }
+
+    // HANDLE SCORE
 
     handleScoreAdd() {
         if(this.score >= 0 && this.score <= width-35) {

@@ -34,10 +34,11 @@ let cursors
 // [ ] scene transition (game.renderer.snapshot)
 // [ ] store hi-score
 // [ ] display keys as pressed
-// [ ] display lives
-// [ ] Ask about tracking the particles as they fall into the thing????
 // [ ] Limit teleportation
 // [ ] damping
-// [ ] make it so particles don't go to the UI box
+// [ ] make it so nothing goes into the UI box
 // [ ] forward and backward animations
 // [ ] check fsm for narmalizing and shirt+space
+// [ ] destroy the oh collided with on impact
+// [ ] hurt animation
+// [ ] make randomizaion tile specific

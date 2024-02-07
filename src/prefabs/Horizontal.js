@@ -8,9 +8,9 @@ class Horizontal extends Phaser.Physics.Arcade.Sprite {
         this.body.setImmovable(true)
         this.body.onCollide = true
         this.anims.play('horizontal-active')
-    }
 
-    update() {
-        // empty
+        this.scene.time.delayedCall(3000, () => {
+            this.destroy()
+        })
     }
 }
