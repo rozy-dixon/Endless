@@ -25,7 +25,7 @@ class Oh extends Phaser.Physics.Arcade.Sprite {
     }
 
     shoot() {
-        if(this.direction == 1) { // normalize and organize
+        if(this.direction == 1) { // normalize and organize with switch()
             this.setVelocityX(this.velocity/1.3)
             this.setVelocityY(this.velocity/1.3) 
         } else if(this.direction == 2) { 

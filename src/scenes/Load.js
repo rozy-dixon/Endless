@@ -30,8 +30,8 @@ class Load extends Phaser.Scene {
         this.load.spritesheet('crossPrep', './assets/crossPrep.png', { frameWidth: 35, frameHeight: 35 })
         // load images
         this.load.image('background', './assets/background.png')        // scrolling background
-        this.load.image('circleEmpty', '/assets/circleEmpty.png')       // empty circle particle
-        this.load.image('circleFilled', '/assets/circleFilled.png')     // filled circle particle
+        this.load.image('circleEmpty', './assets/circleEmpty.png')      // empty circle particle
+        this.load.image('circleFilled', './assets/circleFilled.png')    // filled circle particle
         this.load.image('exParticle', './assets/exParticle.png')        // ex particle
         this.load.image('keyDown', './assets/keyDown.png')              // KEYS ->
         this.load.image('keyLeft', './assets/keyLeft.png')

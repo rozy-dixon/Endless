@@ -23,6 +23,11 @@ const game = new Phaser.Game(config)
 const { width, height } = game.config
 let cursors
 
+// OFFICE HOURS
+// [ ] github green box only
+// [ ] delay not going down
+// [ ] ohs going over UI box
+
 // [ ] Ask about normalizing
 // [ ] Ask about the loading bar
 // [ ] scene transition (game.renderer.snapshot)
@@ -37,7 +42,3 @@ let cursors
 // [ ] hurt animation
 // [ ] make randomizaion tile specific
 // [ ] make enemies and ohs collide
-
-// [ ] github green box only
-// [ ] delay not going down
-// [ ] ohs going over UI box

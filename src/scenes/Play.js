@@ -152,7 +152,7 @@ class Play extends Phaser.Scene {
 
     addOhGroup() {
         this.time.addEvent({
-            delay: this.DELAY,  
+            delay: this.DELAY,
             loop: true, 
             callback: this.addOh, 
             callbackScope: this 
