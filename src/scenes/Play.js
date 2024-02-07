@@ -10,8 +10,8 @@ class Play extends Phaser.Scene {
         this.DRAG = .05
         this.BOUNCE = .5
         this.SPEED = 4
-        this.ENEMY_VELOCITY = -800
-        this.OH_VELOCITY = 150
+        this.ENEMY_VELOCITY = -600
+        this.OH_VELOCITY = 200
         this.DELAY = 3000
         this.LEVEL = 0
     }
@@ -28,6 +28,7 @@ class Play extends Phaser.Scene {
         this.thing.body.immovable = true
         this.thing.body.onOverlap = true
         this.thing.anims.play('thing-calm')
+        this.thing.alpha = .3
         // player collision config
         this.player = this.physics.add.sprite(width/2, (height-55)/2, 'playerCharacter', 1)
         this.player.body.setCollideWorldBounds(true)
@@ -51,7 +52,6 @@ class Play extends Phaser.Scene {
         
         // define cursors
         cursors = this.input.keyboard.createCursorKeys()
-        this.message = this.add.text(width/2, 35, 'Awaiting physics world events...').setOrigin(0.5)
 
         // Timer
         this.timer = this.time.addEvent({
@@ -64,7 +64,6 @@ class Play extends Phaser.Scene {
         // UI CONFIG
         // https://phaser.io/examples/v3/category/geom/rectangle used as reference
         // https://janisjenny.medium.com/how-to-set-world-bounds-with-phaser-99bde692970e used as reference
-        this.scoreText = this.add.text(width/2, height-60, 'Awaiting physics world events...').setOrigin(0.5)
         this.score = 0
         this.physics.world.setBounds(0, 0, width, height-55, true, true, true, true)
         const blackFill = this.add.graphics({ fillStyle: { color: 0x101010 } })
@@ -79,14 +78,13 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+        // scrolling background
         this.background.tilePositionX += this.SPEED
 
         // detecting collisions
         // https://github.com/nathanaltice/BigBodies used as reference
         var slow = false
-        if(this.physics.overlap(this.player, this.thing)) {
-            slow = true
-        }
+        if(this.physics.overlap(this.player, this.thing)) { slow = true }
         if(this.physics.collide(this.player, this.enemyGroup)) {
             this.ohParticlesFilled()
             this.ohParticlesEmpty()
@@ -115,14 +113,6 @@ class Play extends Phaser.Scene {
         else if (cursors.right.isDown && !slow) { this.player.body.setAccelerationX(this.ACCELERATION*.2) } // move right
         else if (cursors.right.isDown && slow) { this.player.body.setAccelerationX((this.ACCELERATION*.2)/2) }
         else { this.player.setAccelerationX(-this.ACCELERATION*.2) }                                        // not moving left or right
-        // no just down property for cursors, handle teleportation (not sure I like this)
-        if(Phaser.Input.Keyboard.JustDown(cursors.space)) {
-            this.player.x += 200
-            // burst forward animation
-        } else if(Phaser.Input.Keyboard.JustDown(cursors.shift)) {
-            this.player.x -= 200
-            // burst backward animation
-        }
 
         // moving the thing
         if(this.score%35 == 0 || this.score == 0) {
@@ -132,10 +122,14 @@ class Play extends Phaser.Scene {
 
     levelUp() {
         this.LEVEL++
-        if(this.LEVEL%5 == 0) {
+        if(this.LEVEL%3 == 0) {
             this.SPEED += .5
             this.OH_VELOCITY += 20
-            this.ENEMY_VELOCITY -= 15
+            this.ENEMY_VELOCITY -= 20
+        }
+        if(this.LEVEL%10 == 0 && this.DELAY >= 1000) {
+            this.DELAY -= 300
+            console.log(this.LEVEL)
         }
     }
 
@@ -190,7 +184,6 @@ class Play extends Phaser.Scene {
     handleScoreAdd() {
         if(this.score >= 0 && this.score <= width-35) {
             this.score += 5
-            this.scoreText.text = this.score
             // https://phaser.io/examples/v3/category/geom/rectangle used as reference
             this.scoreBarUI.width = this.score/2
             this.whiteFill.clear()
@@ -201,7 +194,6 @@ class Play extends Phaser.Scene {
     handleScoreSubtract() {
         if(this.score >= 5 && this.score < width-35) {
             this.score -= 5
-            this.scoreText.text = this.score
             // https://phaser.io/examples/v3/category/geom/rectangle used as reference
             this.scoreBarUI.width = this.score/2
             this.whiteFill.clear()

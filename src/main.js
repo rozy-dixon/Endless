@@ -36,3 +36,8 @@ let cursors
 // [ ] destroy the oh collided with on impact
 // [ ] hurt animation
 // [ ] make randomizaion tile specific
+// [ ] make enemies and ohs collide
+
+// [ ] github green box only
+// [ ] delay not going down
+// [ ] ohs going over UI box

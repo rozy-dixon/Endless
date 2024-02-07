@@ -9,27 +9,10 @@ class Oh extends Phaser.Physics.Arcade.Sprite {
         this.body.setImmovable(true)
         this.body.onCollide = true
 
-        if(direction == 1) { // normalize and organize
-            this.setVelocityX(velocity/1.3)
-            this.setVelocityY(velocity/1.3) 
-        } else if(direction == 2) { 
-            this.setVelocityX(velocity)
-        } else if(direction == 3) {
-            this.setVelocityX(velocity/1.3)
-            this.setVelocityY(-velocity/1.3)
-        } else if(direction == 4) { 
-            this.setVelocityY(-velocity)
-        } else if(direction == 5) { 
-            this.setVelocityX(-velocity/1.3)
-            this.setVelocityY(-velocity/1.3)
-        } else if(direction == 6) { 
-            this.setVelocityX(-velocity)
-        } else if(direction == 7) { 
-            this.setVelocityX(-velocity/1.3)
-            this.setVelocityY(velocity/1.3)
-        } else if(direction == 8) { 
-            this.setVelocityY(velocity)
-        }
+        this.direction = direction
+        this.velocity = velocity
+
+        this.shoot()
     }
 
     update() {
@@ -38,6 +21,30 @@ class Oh extends Phaser.Physics.Arcade.Sprite {
         }
         if(this.y < -this.height || this.y > height+this.height) {
             this.destroy()
+        }
+    }
+
+    shoot() {
+        if(this.direction == 1) { // normalize and organize
+            this.setVelocityX(this.velocity/1.3)
+            this.setVelocityY(this.velocity/1.3) 
+        } else if(this.direction == 2) { 
+            this.setVelocityX(this.velocity)
+        } else if(this.direction == 3) {
+            this.setVelocityX(this.velocity/1.3)
+            this.setVelocityY(-this.velocity/1.3)
+        } else if(this.direction == 4) { 
+            this.setVelocityY(-this.velocity)
+        } else if(this.direction == 5) { 
+            this.setVelocityX(-this.velocity/1.3)
+            this.setVelocityY(-this.velocity/1.3)
+        } else if(this.direction == 6) { 
+            this.setVelocityX(-this.velocity)
+        } else if(this.direction == 7) { 
+            this.setVelocityX(-this.velocity/1.3)
+            this.setVelocityY(this.velocity/1.3)
+        } else if(this.direction == 8) { 
+            this.setVelocityY(this.velocity)
         }
     }
 }
