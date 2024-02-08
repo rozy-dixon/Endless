@@ -11,9 +11,9 @@ class Play extends Phaser.Scene {
         this.BOUNCE = .5
         this.SPEED = 4
         this.ENEMY_VELOCITY = -600
-        this.OH_VELOCITY = 200
-        this.DELAY = 3000
-        this.LEVEL = 0
+        this.OH_VELOCITY = 300
+        this.DELAY = 2500
+        this.SECONDS = 0
     }
 
     create() {
@@ -53,28 +53,34 @@ class Play extends Phaser.Scene {
         // define cursors
         cursors = this.input.keyboard.createCursorKeys()
 
-        // Timer
+        // timer
         this.timer = this.time.addEvent({
-            delay: this.DELAY,
+            delay: 1000,
             loop: true,
             callback: this.levelUp,
             callbackScope: this
         })
 
-        // UI CONFIG
+        // UI & SCORE CONFIG
         // https://phaser.io/examples/v3/category/geom/rectangle used as reference
         // https://janisjenny.medium.com/how-to-set-world-bounds-with-phaser-99bde692970e used as reference
         this.thingScore = 0
+        this.exScore = 0
+        this.ohScore = 0
+        this.gameOver = false
+        this.exScoreUI = this.add.text(width/2, 32, this.exScore).setOrigin(0.5)
         this.physics.world.setBounds(0, 0, width, height-55, true, true, true, true)
+        // black out the UI box
         const blackFill = this.add.graphics({ fillStyle: { color: 0x101010 } })
-        const whiteStroke = this.add.graphics({ lineStyle: { width: 3, color: 0xF6F0DD }, fillStyle: { color: 0x000000 } })
-        this.whiteFill = this.add.graphics({ lineStyle: { width: 0, color: 0xF6F0DD }, fillStyle: { color: 0xF6F0DD } })
         const blackBoxUI = new Phaser.Geom.Rectangle(0, 700, width, 55)
-        blackFill.fillRectShape(blackBoxUI)
-        const emptyBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2), 710, 485, 35)
-        whiteStroke.strokeRectShape(emptyBarUI)
-        this.scoreBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2)+5, 715, this.thingScore, 25)   // max size: 472.5
-        this.whiteFill.fillRectShape(this.scoreBarUI)
+        blackFill.fillRectShape(blackBoxUI).setDepth(100)
+        this.whiteFill = this.add.graphics({ lineStyle: { width: 0, color: 0xF6F0DD }, fillStyle: { color: 0xF6F0DD } })
+        this.scoreBarUI = new Phaser.Geom.Rectangle((width/2)-(350/2), 710, this.ohScore, 35)      // max size: 472.5
+        this.whiteFill.fillRectShape(this.scoreBarUI).setAlpha(.5).setDepth(100)
+        // ui bar temp
+        this.uiBar = this.add.sprite((width/2)-(350/2), 710, 'uiBar', 1).setOrigin(0, 0).setDepth(100)
+        this.uiBar.anims.play('ui-bar')
+        // 350
     }
 
     update() {
@@ -88,16 +94,18 @@ class Play extends Phaser.Scene {
         if(this.physics.collide(this.player, this.enemyGroup)) {
             this.ohParticlesFilled()
             this.ohParticlesEmpty()
-            this.handleScoreAdd()
+            this.handleThingScoreAdd()
             this.cameras.main.shake(100, 0.015)
         }
         if(this.physics.collide(this.player, this.ohGroup)) {
             this.ohParticlesEmpty()
-            this.handleScoreAdd()
+            this.handleThingScoreAdd()
             this.cameras.main.shake(100, 0.015)
         }
         if(this.physics.collide(this.player, this.ex)) {
-            this.handleScoreSubtract()
+            this.handleThingScoreSubtract()
+            this.exScore++
+            this.exScoreUI.text = this.exScore
             this.exParticles()
             this.ex.move()
             this.cameras.main.shake(80, 0.01)
@@ -114,7 +122,7 @@ class Play extends Phaser.Scene {
         if(cursors.left.isDown && !slow) { this.player.body.setAccelerationX(-this.ACCELERATION) }          // move left
         else if(cursors.left.isDown && slow) { this.player.body.setAccelerationX(-this.ACCELERATION/2) }
         else if (cursors.right.isDown && !slow) { this.player.body.setAccelerationX(this.ACCELERATION*.2) } // move right
-        else if (cursors.right.isDown && slow) { this.player.body.setAccelerationX((this.ACCELERATION*.2)/2) }
+        else if (cursors.right.isDown && slow) { this.player.body.setAccelerationX((this.ACCELERATION*.15)) }
         else { this.player.setAccelerationX(-this.ACCELERATION*.2) }                                        // not moving left or right
 
         // moving the thing
@@ -124,15 +132,15 @@ class Play extends Phaser.Scene {
     }
 
     levelUp() {
-        this.LEVEL++
-        if(this.LEVEL%3 == 0) {
+        this.SECONDS++
+        if(this.SECONDS%6 == 0) {
             this.SPEED += .5
             this.OH_VELOCITY += 20
             this.ENEMY_VELOCITY -= 20
         }
-        if(this.LEVEL%10 == 0 && this.DELAY >= 1000) {
+        if(this.SECONDS%10 == 0 && this.DELAY >= 1000) {
             this.DELAY -= 300
-            console.log(this.LEVEL)
+            console.log(this.SECONDS)
         }
     }
 
@@ -184,23 +192,24 @@ class Play extends Phaser.Scene {
 
     // HANDLE SCORE
 
-    handleScoreAdd() {
+    handleThingScoreAdd() {
         if(this.thingScore >= 0 && this.thingScore <= width-35) {
             this.thingScore += 5
-            // https://phaser.io/examples/v3/category/geom/rectangle used as reference
-            this.scoreBarUI.width = this.thingScore/2
+        }
+        // https://phaser.io/examples/v3/category/geom/rectangle used as reference
+        if(this.ohScore < 350) {
+            this.ohScore += 2.5
+            this.scoreBarUI.width = this.ohScore
             this.whiteFill.clear()
             this.whiteFill.fillRectShape(this.scoreBarUI)
+        } else if(this.ohScore >= 350) {
+            this.gameOver = true
         }
     }
 
-    handleScoreSubtract() {
+    handleThingScoreSubtract() {
         if(this.thingScore >= 5 && this.thingScore < width-35) {
             this.thingScore -= 5
-            // https://phaser.io/examples/v3/category/geom/rectangle used as reference
-            this.scoreBarUI.width = this.thingScore/2
-            this.whiteFill.clear()
-            this.whiteFill.fillRectShape(this.scoreBarUI)
         }
     }
 

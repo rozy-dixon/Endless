@@ -21,8 +21,9 @@ class Load extends Phaser.Scene {
         this.load.spritesheet('playerCharacter', './assets/spritesheets/playerCharacter.png', { frameWidth: 35, frameHeight: 35 })
         this.load.spritesheet('enemyCharacter', './assets/spritesheets/enemyCharacter.png', { frameWidth: 70, frameHeight: 70 })
         this.load.spritesheet('thing', './assets/spritesheets/thing.png', { frameWidth: 980, frameHeight: 700 })
-        this.load.spritesheet('horizontal', './assets/spritesheets/horizontal.png', { frameWidth: 980, frameHeight: 35 })
-        this.load.spritesheet('vertical', './assets/spritesheets/vertical.png', { frameWidth: 35, frameHeight: 700 })
+        //this.load.spritesheet('horizontal', './assets/spritesheets/horizontal.png', { frameWidth: 980, frameHeight: 35 })
+        //this.load.spritesheet('vertical', './assets/spritesheets/vertical.png', { frameWidth: 35, frameHeight: 700 })
+        this.load.spritesheet('uiBar', './assets/spritesheets/uiBar.png', { frameWidth: 350, frameHeight: 35 })
         // ex, oh, and square (cross prep) loaded as spritesheets incase I want to add animations
         this.load.spritesheet('exCharacter', './assets/exCharacter.png', { frameWidth: 35, frameHeight: 35 })
         this.load.spritesheet('ohCharacterGreen', './assets/ohCharacterGreen.png', { frameWidth: 35, frameHeight: 35 })
@@ -70,17 +71,11 @@ class Load extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         })
-        // vertical and horizontal animation config
-        this.anims.create({ 
-            key: 'horizontal-active', 
-            frames: this.anims.generateFrameNames('horizontal', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        })
-        this.anims.create({ 
-            key: 'vertical-active', 
-            frames: this.anims.generateFrameNames('vertical', { start: 0, end: 3 }),
-            frameRate: 10,
+        // drip feed
+        this.anims.create({
+            key: 'ui-bar',
+            frames: this.anims.generateFrameNames('uiBar', {start: 0, end: 9 }),
+            framRate: 10,
             repeat: -1
         })
 

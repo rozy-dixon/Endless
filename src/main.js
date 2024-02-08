@@ -23,14 +23,7 @@ const game = new Phaser.Game(config)
 const { width, height } = game.config
 let cursors
 
-// OFFICE HOURS
-// [ ] github green box only
 // [ ] delay not going down (send to nate and nathan)
-// [ ] ohs going over UI box (set depth)
-
-// [ ] change scoring system
-// [ ] current score system controls thing (from slow down to slow down + pull)
-// [ ] collecting ex and time = hi-score
 // [ ] bar fills up *only* and cannot be brought down. it determines game over.
 //     - rather than being a bar, it should spell out []DRIP[]FEED[]
 // [ ] make X thicker
