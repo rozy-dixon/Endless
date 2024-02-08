@@ -25,8 +25,15 @@ let cursors
 
 // OFFICE HOURS
 // [ ] github green box only
-// [ ] delay not going down
-// [ ] ohs going over UI box
+// [ ] delay not going down (send to nate and nathan)
+// [ ] ohs going over UI box (set depth)
+
+// [ ] change scoring system
+// [ ] current score system controls thing (from slow down to slow down + pull)
+// [ ] collecting ex and time = hi-score
+// [ ] bar fills up *only* and cannot be brought down. it determines game over.
+//     - rather than being a bar, it should spell out []DRIP[]FEED[]
+// [ ] make X thicker
 
 // [ ] Ask about normalizing
 // [ ] Ask about the loading bar
@@ -42,3 +49,16 @@ let cursors
 // [ ] hurt animation
 // [ ] make randomizaion tile specific
 // [ ] make enemies and ohs collide
+// [ ] setRandomPosition()
+
+// OTHER THOUGHTS:
+// - gradients and grains
+// - tile by tile movement
+// - scanlines, wave
+// - enemy groupings of random type
+// - animated shaky tile https://twitter.com/MrmoTarius/status/1746838312956911859
+// - halftones & layering
+// - photo cutout sprites
+// - procedurally generated rooms, grid of 9? rooms redone on every entrance
+//   - or two roooms
+// - terminal-esque output

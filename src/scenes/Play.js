@@ -64,7 +64,7 @@ class Play extends Phaser.Scene {
         // UI CONFIG
         // https://phaser.io/examples/v3/category/geom/rectangle used as reference
         // https://janisjenny.medium.com/how-to-set-world-bounds-with-phaser-99bde692970e used as reference
-        this.score = 0
+        this.thingScore = 0
         this.physics.world.setBounds(0, 0, width, height-55, true, true, true, true)
         const blackFill = this.add.graphics({ fillStyle: { color: 0x101010 } })
         const whiteStroke = this.add.graphics({ lineStyle: { width: 3, color: 0xF6F0DD }, fillStyle: { color: 0x000000 } })
@@ -73,7 +73,7 @@ class Play extends Phaser.Scene {
         blackFill.fillRectShape(blackBoxUI)
         const emptyBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2), 710, 485, 35)
         whiteStroke.strokeRectShape(emptyBarUI)
-        this.scoreBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2)+5, 715, this.score, 25)   // max size: 472.5
+        this.scoreBarUI = new Phaser.Geom.Rectangle((width/2)-(500/2)+5, 715, this.thingScore, 25)   // max size: 472.5
         this.whiteFill.fillRectShape(this.scoreBarUI)
     }
 
@@ -89,15 +89,18 @@ class Play extends Phaser.Scene {
             this.ohParticlesFilled()
             this.ohParticlesEmpty()
             this.handleScoreAdd()
+            this.cameras.main.shake(100, 0.015)
         }
         if(this.physics.collide(this.player, this.ohGroup)) {
             this.ohParticlesEmpty()
             this.handleScoreAdd()
+            this.cameras.main.shake(100, 0.015)
         }
         if(this.physics.collide(this.player, this.ex)) {
             this.handleScoreSubtract()
             this.exParticles()
             this.ex.move()
+            this.cameras.main.shake(80, 0.01)
         }
 
         // handle input
@@ -115,8 +118,8 @@ class Play extends Phaser.Scene {
         else { this.player.setAccelerationX(-this.ACCELERATION*.2) }                                        // not moving left or right
 
         // moving the thing
-        if(this.score%35 == 0 || this.score == 0) {
-            this.thing.x = ((this.score/35)*35)+35
+        if(this.thingScore%35 == 0 || this.thingScore == 0) {
+            this.thing.x = ((this.thingScore/35)*35)+35
         }
     }
 
@@ -182,20 +185,20 @@ class Play extends Phaser.Scene {
     // HANDLE SCORE
 
     handleScoreAdd() {
-        if(this.score >= 0 && this.score <= width-35) {
-            this.score += 5
+        if(this.thingScore >= 0 && this.thingScore <= width-35) {
+            this.thingScore += 5
             // https://phaser.io/examples/v3/category/geom/rectangle used as reference
-            this.scoreBarUI.width = this.score/2
+            this.scoreBarUI.width = this.thingScore/2
             this.whiteFill.clear()
             this.whiteFill.fillRectShape(this.scoreBarUI)
         }
     }
 
     handleScoreSubtract() {
-        if(this.score >= 5 && this.score < width-35) {
-            this.score -= 5
+        if(this.thingScore >= 5 && this.thingScore < width-35) {
+            this.thingScore -= 5
             // https://phaser.io/examples/v3/category/geom/rectangle used as reference
-            this.scoreBarUI.width = this.score/2
+            this.scoreBarUI.width = this.thingScore/2
             this.whiteFill.clear()
             this.whiteFill.fillRectShape(this.scoreBarUI)
         }
