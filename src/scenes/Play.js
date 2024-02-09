@@ -22,6 +22,10 @@ class Play extends Phaser.Scene {
         // set background
         this.background = this.add.tileSprite(0, 0, 980, 755, 'background').setOrigin(0, 0)
 
+        // collision sounds
+        const explosions = [ 'enemyCollide1', 'enemyCollide2', 'enemyCollide3' ]
+        this.explosionSound = explosions[Math.floor(Math.random()*3)]
+
         // COLLISION CONFIG
         // thing collision config
         this.thing = this.physics.add.sprite(35, 0, 'thing', 1).setOrigin(1, 0)
@@ -80,7 +84,6 @@ class Play extends Phaser.Scene {
         // ui bar temp
         this.uiBar = this.add.sprite((width/2)-(350/2), 710, 'uiBar', 1).setOrigin(0, 0).setDepth(100)
         this.uiBar.anims.play('ui-bar')
-        // 350
     }
 
     update() {
@@ -109,6 +112,7 @@ class Play extends Phaser.Scene {
             this.exParticles()
             this.ex.move()
             this.cameras.main.shake(80, 0.01)
+            this.sound.play('exCollide')
         }
 
         // handle input
@@ -205,6 +209,7 @@ class Play extends Phaser.Scene {
         } else if(this.ohScore >= 350) {
             this.gameOver = true
         }
+        this.sound.play(this.explosionSound)
     }
 
     handleThingScoreSubtract() {

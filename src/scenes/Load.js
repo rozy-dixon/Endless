@@ -38,6 +38,11 @@ class Load extends Phaser.Scene {
         this.load.image('keyLeft', './assets/keyLeft.png')
         this.load.image('keyRight', './assets/keyRight.png')
         this.load.image('keyUp', './assets/keyUp.png')
+        // load audio
+        this.load.audio('enemyCollide1', './assets/audio/enemyCollide1.wav')
+        this.load.audio('enemyCollide2', './assets/audio/enemyCollide2.wav')
+        this.load.audio('enemyCollide3', './assets/audio/enemyCollide3.wav')
+        this.load.audio('exCollide', './assets/audio/exCollide.wav')
     }
 
     create() {
