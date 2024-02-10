@@ -18,6 +18,14 @@ class Play extends Phaser.Scene {
 
     create() {
         console.log("PLAY SCENE! YIPPPEEEEE!!") // just checking :)
+        // play my little tune
+        this.tune = this.sound.add('tune', { 
+            mute: false,
+            volume: 1,
+            rate: 1,
+            loop: true
+        })
+        this.tune.play()
 
         // set background
         this.background = this.add.tileSprite(0, 0, 980, 755, 'background').setOrigin(0, 0)
@@ -91,6 +99,8 @@ class Play extends Phaser.Scene {
     update() {
         // game over
         if(this.gameOver) {
+            this.tune.stop()
+            this.timer.destroy()
             this.scene.start("gameOverScene")
         }
 
@@ -149,12 +159,12 @@ class Play extends Phaser.Scene {
             this.thingScore += 5
         }
         // https://phaser.io/examples/v3/category/geom/rectangle used as reference
-        if(this.ohScore < 350) {
+        if(this.ohScore < 35) {                                // 210
             this.ohScore += 2.5
             this.scoreBarUI.width = this.ohScore
             this.whiteFill.clear()
             this.whiteFill.fillRectShape(this.scoreBarUI)
-        } else if(this.ohScore >= 350) {
+        } else if(this.ohScore >= 35) {
             this.gameOver = true
         }
         this.sound.play(this.explosionSound)

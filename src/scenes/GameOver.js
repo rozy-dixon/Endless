@@ -6,6 +6,15 @@ class GameOver extends Phaser.Scene {
     create() {
         console.log("GAME OVER SCENE! PARTY TIME!") // just checking :)
 
+        // play the the creepy tune
+        this.ocarina = this.sound.add('ocarina', { 
+            mute: false,
+            volume: 1,
+            rate: 1,
+            loop: true 
+        })
+        this.ocarina.play()
+
         // define cursors
         cursors = this.input.keyboard.createCursorKeys()
         this.gameOver = this.add.text(width/2, 35, 'game over').setOrigin(0.5)
@@ -17,6 +26,7 @@ class GameOver extends Phaser.Scene {
 
     update() {
         if(cursors.up.isDown) {
+            this.ocarina.stop()
             this.scene.start('playScene')
         }
     }
