@@ -12,7 +12,7 @@ class Play extends Phaser.Scene {
         this.SPEED = 4
         this.ENEMY_VELOCITY = -600
         this.OH_VELOCITY = 300
-        this.DELAY = 2500
+        this.DELAY = 3000
         this.SECONDS = 0
     }
 
@@ -52,7 +52,9 @@ class Play extends Phaser.Scene {
         this.ex = new Ex(this)
         // oh config
         this.ohGroup = this.add.group({ runChildUpdate: true })
-        this.addOhGroup()
+        this.addOhGroup60()
+        this.time.delayedCall(60000, () => { this.addOhGroup120() })
+        this.time.delayedCall(120000, () => { this.addOhGroup() })
         
         // define cursors
         cursors = this.input.keyboard.createCursorKeys()
@@ -87,6 +89,11 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+        // game over
+        if(this.gameOver) {
+            this.scene.start("gameOverScene")
+        }
+
         // scrolling background
         this.background.tilePositionX += this.SPEED
 
@@ -135,15 +142,39 @@ class Play extends Phaser.Scene {
         }
     }
 
+    // HANDLE SCORE & LEVELING/SECONDS-PLAYED
+
+    handleThingScoreAdd() {
+        if(this.thingScore >= 0 && this.thingScore <= width-35) {
+            this.thingScore += 5
+        }
+        // https://phaser.io/examples/v3/category/geom/rectangle used as reference
+        if(this.ohScore < 350) {
+            this.ohScore += 2.5
+            this.scoreBarUI.width = this.ohScore
+            this.whiteFill.clear()
+            this.whiteFill.fillRectShape(this.scoreBarUI)
+        } else if(this.ohScore >= 350) {
+            this.gameOver = true
+        }
+        this.sound.play(this.explosionSound)
+    }
+
+    handleThingScoreSubtract() {
+        if(this.thingScore >= 5 && this.thingScore < width-35) {
+            this.thingScore -= 5
+        }
+    }
+
     levelUp() {
         this.SECONDS++
         if(this.SECONDS%6 == 0) {
             this.SPEED += .5
             this.OH_VELOCITY += 20
             this.ENEMY_VELOCITY -= 20
+            // [ ] speed up animation
         }
-        if(this.SECONDS%10 == 0 && this.DELAY >= 1000) {
-            this.DELAY -= 300
+        if(this.SECONDS%10 == 0) {
             console.log(this.SECONDS)
         }
     }
@@ -152,7 +183,7 @@ class Play extends Phaser.Scene {
 
     addEnemy() {
         // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
-        let enemy = new Enemy(this, this.ENEMY_VELOCITY)
+        let enemy = new Enemy(this, this.ENEMY_VELOCITY, this.SECONDS)
         this.enemyGroup.add(enemy)
     }
 
@@ -160,14 +191,32 @@ class Play extends Phaser.Scene {
         let ohX = Phaser.Math.Between(35, width-35)
         let ohY = Phaser.Math.Between(35, height-55-35)
         for (let i = 1; i <= 8; i++) {
-            let oh = new Oh(this, ohX, ohY, i, this.OH_VELOCITY)
+            let oh = new Oh(this, ohX, ohY, i, this.OH_VELOCITY, this.SECONDS)
             this.ohGroup.add(oh)
         }
     }
 
-    addOhGroup() {
+    addOhGroup60() {
         this.time.addEvent({
             delay: this.DELAY,
+            repeat: 18, 
+            callback: this.addOh, 
+            callbackScope: this 
+        })
+    }
+
+    addOhGroup120() {
+        this.time.addEvent({
+            delay: 2000,
+            repeat: 29, 
+            callback: this.addOh, 
+            callbackScope: this 
+        })
+    }
+    
+    addOhGroup() {
+        this.time.addEvent({
+            delay: 1000,
             loop: true, 
             callback: this.addOh, 
             callbackScope: this 
@@ -192,30 +241,6 @@ class Play extends Phaser.Scene {
             callback: this.addCross,
             callbackScope: this
         })
-    }
-
-    // HANDLE SCORE
-
-    handleThingScoreAdd() {
-        if(this.thingScore >= 0 && this.thingScore <= width-35) {
-            this.thingScore += 5
-        }
-        // https://phaser.io/examples/v3/category/geom/rectangle used as reference
-        if(this.ohScore < 350) {
-            this.ohScore += 2.5
-            this.scoreBarUI.width = this.ohScore
-            this.whiteFill.clear()
-            this.whiteFill.fillRectShape(this.scoreBarUI)
-        } else if(this.ohScore >= 350) {
-            this.gameOver = true
-        }
-        this.sound.play(this.explosionSound)
-    }
-
-    handleThingScoreSubtract() {
-        if(this.thingScore >= 5 && this.thingScore < width-35) {
-            this.thingScore -= 5
-        }
     }
 
     // PARTICLE EFFECTS

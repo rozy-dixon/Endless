@@ -1,5 +1,5 @@
 class Oh extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, direction, velocity) {
+    constructor(scene, x, y, direction, velocity, level) {
         super(scene, x, y, 'ohCharacterWhite')
 
         this.scene.add.existing(this)
@@ -11,8 +11,31 @@ class Oh extends Phaser.Physics.Arcade.Sprite {
 
         this.direction = direction
         this.velocity = velocity
+        this.level = level
 
         this.shoot()
+        /* 
+        if(this.level > 10) {
+            this.scene.time.addEvent({
+                delay: 1500,
+                repeat: 1,
+                callback: this.shoot,
+                callbackScope: this
+            })
+        }
+        */
+        /* 
+        Uncaught TypeError: Cannot read properties of undefined (reading 'setVelocityX')
+        at Oh.setVelocityX (phaser.js:150819:19)
+        at Oh.shoot (Oh.js:38:26)
+        at Clock.update (phaser.js:230237:36)
+        at EventEmitter.emit (phaser.js:220:33)
+        at Systems.step (phaser.js:197307:16)
+        at SceneManager.update (phaser.js:194544:21)
+        at Game.step (phaser.js:17206:20)
+        at TimeStep.step (phaser.js:18230:14)
+        at step (phaser.js:31330:19)
+        */
     }
 
     update() {
@@ -25,26 +48,32 @@ class Oh extends Phaser.Physics.Arcade.Sprite {
     }
 
     shoot() {
-        if(this.direction == 1) { // normalize and organize with switch()
-            this.setVelocityX(this.velocity/1.3)
-            this.setVelocityY(this.velocity/1.3) 
-        } else if(this.direction == 2) { 
-            this.setVelocityX(this.velocity)
-        } else if(this.direction == 3) {
-            this.setVelocityX(this.velocity/1.3)
-            this.setVelocityY(-this.velocity/1.3)
-        } else if(this.direction == 4) { 
-            this.setVelocityY(-this.velocity)
-        } else if(this.direction == 5) { 
-            this.setVelocityX(-this.velocity/1.3)
-            this.setVelocityY(-this.velocity/1.3)
-        } else if(this.direction == 6) { 
-            this.setVelocityX(-this.velocity)
-        } else if(this.direction == 7) { 
-            this.setVelocityX(-this.velocity/1.3)
-            this.setVelocityY(this.velocity/1.3)
-        } else if(this.direction == 8) { 
-            this.setVelocityY(this.velocity)
+        switch (this.direction) {
+            case 1: this.setVelocityX(this.velocity/1.3)
+                this.setVelocityY(this.velocity/1.3)
+                break
+            case 2: this.setVelocityX(this.velocity)
+                break
+            case 3: this.setVelocityX(this.velocity/1.3)
+                this.setVelocityY(-this.velocity/1.3)
+                break
+            case 4: this.setVelocityY(-this.velocity)
+                break
+            case 5: this.setVelocityX(-this.velocity/1.3)
+                this.setVelocityY(-this.velocity/1.3)
+                break
+            case 6: this.setVelocityX(-this.velocity)
+                break
+            case 7: this.setVelocityX(-this.velocity/1.3)
+                this.setVelocityY(this.velocity/1.3)
+                break
+            case 8: this.setVelocityY(this.velocity)
+                break
         }
+        /* if(this.level > 10) {
+            console.log('lvl greater than 10.')
+            this.scene.time.delayedCall(1500, () => { 
+            })
+        } */
     }
 }
