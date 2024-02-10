@@ -40,7 +40,6 @@ class Play extends Phaser.Scene {
         this.thing.body.immovable = true
         this.thing.body.onOverlap = true
         this.thing.anims.play('thing-calm')
-        this.thing.alpha = .3
         // player collision config
         this.player = this.physics.add.sprite(width/2, (height-55)/2, 'playerCharacter', 1)
         this.player.body.setCollideWorldBounds(true)
@@ -90,7 +89,7 @@ class Play extends Phaser.Scene {
         blackFill.fillRectShape(blackBoxUI).setDepth(100)
         this.whiteFill = this.add.graphics({ lineStyle: { width: 0, color: 0xF6F0DD }, fillStyle: { color: 0xF6F0DD } })
         this.scoreBarUI = new Phaser.Geom.Rectangle((width/2)-(350/2), 710, this.ohScore, 35)      // max size: 472.5
-        this.whiteFill.fillRectShape(this.scoreBarUI).setAlpha(.5).setDepth(100)
+        this.whiteFill.fillRectShape(this.scoreBarUI).setDepth(100)
         // ui bar temp
         this.uiBar = this.add.sprite((width/2)-(350/2), 710, 'uiBar', 1).setOrigin(0, 0).setDepth(100)
         this.uiBar.anims.play('ui-bar')
@@ -159,12 +158,12 @@ class Play extends Phaser.Scene {
             this.thingScore += 5
         }
         // https://phaser.io/examples/v3/category/geom/rectangle used as reference
-        if(this.ohScore < 35) {                                // 210
+        if(this.ohScore < 210) {
             this.ohScore += 2.5
             this.scoreBarUI.width = this.ohScore
             this.whiteFill.clear()
             this.whiteFill.fillRectShape(this.scoreBarUI)
-        } else if(this.ohScore >= 35) {
+        } else if(this.ohScore >= 210) {
             this.gameOver = true
         }
         this.sound.play(this.explosionSound)

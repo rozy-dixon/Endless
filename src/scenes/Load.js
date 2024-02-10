@@ -21,9 +21,7 @@ class Load extends Phaser.Scene {
         this.load.spritesheet('playerCharacter', './assets/spritesheets/playerCharacter.png', { frameWidth: 35, frameHeight: 35 })
         this.load.spritesheet('enemyCharacter', './assets/spritesheets/enemyCharacter.png', { frameWidth: 70, frameHeight: 70 })
         this.load.spritesheet('thing', './assets/spritesheets/thing.png', { frameWidth: 980, frameHeight: 700 })
-        //this.load.spritesheet('horizontal', './assets/spritesheets/horizontal.png', { frameWidth: 980, frameHeight: 35 })
-        //this.load.spritesheet('vertical', './assets/spritesheets/vertical.png', { frameWidth: 35, frameHeight: 700 })
-        this.load.spritesheet('uiBar', './assets/spritesheets/uiBar.png', { frameWidth: 350, frameHeight: 35 })
+        this.load.spritesheet('uiBar', './assets/spritesheets/uiBar.png', { frameWidth: 210, frameHeight: 35 })
         // ex, oh, and square (cross prep) loaded as spritesheets incase I want to add animations
         this.load.spritesheet('exCharacter', './assets/exCharacter.png', { frameWidth: 35, frameHeight: 35 })
         this.load.spritesheet('ohCharacterGreen', './assets/ohCharacterGreen.png', { frameWidth: 35, frameHeight: 35 })
