@@ -14,28 +14,6 @@ class Oh extends Phaser.Physics.Arcade.Sprite {
         this.level = level
 
         this.shoot()
-        /* 
-        if(this.level > 10) {
-            this.scene.time.addEvent({
-                delay: 1500,
-                repeat: 1,
-                callback: this.shoot,
-                callbackScope: this
-            })
-        }
-        */
-        /* 
-        Uncaught TypeError: Cannot read properties of undefined (reading 'setVelocityX')
-        at Oh.setVelocityX (phaser.js:150819:19)
-        at Oh.shoot (Oh.js:38:26)
-        at Clock.update (phaser.js:230237:36)
-        at EventEmitter.emit (phaser.js:220:33)
-        at Systems.step (phaser.js:197307:16)
-        at SceneManager.update (phaser.js:194544:21)
-        at Game.step (phaser.js:17206:20)
-        at TimeStep.step (phaser.js:18230:14)
-        at step (phaser.js:31330:19)
-        */
     }
 
     update() {
@@ -70,10 +48,5 @@ class Oh extends Phaser.Physics.Arcade.Sprite {
             case 8: this.setVelocityY(this.velocity)
                 break
         }
-        /* if(this.level > 10) {
-            console.log('lvl greater than 10.')
-            this.scene.time.delayedCall(1500, () => { 
-            })
-        } */
     }
 }

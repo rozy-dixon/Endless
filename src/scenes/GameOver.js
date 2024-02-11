@@ -6,6 +6,9 @@ class GameOver extends Phaser.Scene {
     create() {
         console.log("GAME OVER SCENE! PARTY TIME!") // just checking :)
 
+        // set background
+        this.add.image(0, 0, 'gameOver').setOrigin(0, 0)
+
         // play the the creepy tune
         this.ocarina = this.sound.add('ocarina', { 
             mute: false,
@@ -17,8 +20,6 @@ class GameOver extends Phaser.Scene {
 
         // define cursors
         cursors = this.input.keyboard.createCursorKeys()
-        this.gameOver = this.add.text(width/2, 35, 'game over').setOrigin(0.5)
-        this.pressUp = this.add.text(width/2, 70, 'press ^ to begin again.').setOrigin(0.5)
         // [ ] check for new hi score
         // [ ] display score and seconds played
         // [ ] display hi score
@@ -27,7 +28,19 @@ class GameOver extends Phaser.Scene {
     update() {
         if(cursors.up.isDown) {
             this.ocarina.stop()
+            this.sound.play('click1')
             this.scene.start('playScene')
         }
+        if(cursors.left.isDown) {
+            this.ocarina.stop()
+            this.sound.play('click2')
+            this.scene.start('menuScene')
+        }
+        if(cursors.right.isDown) {
+            this.ocarina.stop()
+            this.sound.play('click3')
+            this.scene.start('rulesScene')
+        }
+        this.cameras.main.shake(10, 0.001)
     }
 }
