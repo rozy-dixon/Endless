@@ -24,6 +24,9 @@ const game = new Phaser.Game(config)
 const { width, height } = game.config
 let cursors
 
+// uncomment the following line if you need to purge local storage data
+//localStorage.clear()
+
 // FINAL TO-DO
 // [ ] loading bar
 // [ ] hi-score

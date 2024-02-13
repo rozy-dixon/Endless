@@ -18,6 +18,7 @@ class Load extends Phaser.Scene {
 
         // load spritesheets
         // all-caps futura was used as reference for playerCharacter sprite, but loosely (the main goal was to fill out each tile)
+        // at the end of the day, it is not a specific font, but spacey blocky fonts have been done before, so it's not meant to be original
         this.load.spritesheet('playerCharacter', './assets/spritesheets/playerCharacter.png', { frameWidth: 35, frameHeight: 35 })
         this.load.spritesheet('playerCharacterEx', './assets/spritesheets/playerCharacterEx.png', { frameWidth: 35, frameHeight: 35 })
         this.load.spritesheet('playerCharacterHurt', './assets/spritesheets/playerCharacterHurt.png', { frameWidth: 35, frameHeight: 35 })
@@ -50,6 +51,8 @@ class Load extends Phaser.Scene {
         // load song(?) audio
         this.load.audio('tune', './assets/audio/tune.mp3')
         this.load.audio('ocarina', './assets/audio/ocarina.mp3')
+        // load font
+        this.load.bitmapFont('rozyFont', './assets/font/rozyFont.png', './assets/font/rozyFont.xml')
     }
 
     create() {
