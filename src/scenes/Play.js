@@ -167,12 +167,20 @@ class Play extends Phaser.Scene {
             this.gameOver = true
         }
         this.sound.play(this.explosionSound)
+        this.player.anims.play('hurt')
+        this.player.on('animationcomplete', () => {
+            this.player.anims.play('neutral')
+        })
     }
 
     handleThingScoreSubtract() {
         if(this.thingScore >= 5 && this.thingScore < width-35) {
             this.thingScore -= 5
         }
+        this.player.anims.play('collect')
+        this.player.on('animationcomplete', () => {
+            this.player.anims.play('neutral')
+        })
     }
 
     levelUp() {

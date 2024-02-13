@@ -19,6 +19,8 @@ class Load extends Phaser.Scene {
         // load spritesheets
         // all-caps futura was used as reference for playerCharacter sprite, but loosely (the main goal was to fill out each tile)
         this.load.spritesheet('playerCharacter', './assets/spritesheets/playerCharacter.png', { frameWidth: 35, frameHeight: 35 })
+        this.load.spritesheet('playerCharacterEx', './assets/spritesheets/playerCharacterEx.png', { frameWidth: 35, frameHeight: 35 })
+        this.load.spritesheet('playerCharacterHurt', './assets/spritesheets/playerCharacterHurt.png', { frameWidth: 35, frameHeight: 35 })
         this.load.spritesheet('enemyCharacter', './assets/spritesheets/enemyCharacter.png', { frameWidth: 70, frameHeight: 70 })
         this.load.spritesheet('thing', './assets/spritesheets/thing.png', { frameWidth: 980, frameHeight: 700 })
         this.load.spritesheet('uiBar', './assets/spritesheets/uiBar.png', { frameWidth: 210, frameHeight: 35 })
@@ -61,17 +63,23 @@ class Load extends Phaser.Scene {
             frameRate: 15,
             repeat: -1
         })
+        this.anims.create({
+            key: 'collect',
+            frames: this.anims.generateFrameNames('playerCharacterEx', { start: 0, end: 15 }),
+            frameRate: 45,
+            repeat: 0
+        })
+        this.anims.create({
+            key: 'hurt',
+            frames: this.anims.generateFrameNames('playerCharacterHurt', { start: 0, end: 20 }),
+            frameRate: 45,
+            repeat: 0
+        })
         // thing animation config
         this.anims.create({
             key: 'thing-calm',
             frames: this.anims.generateFrameNames('thing', { start: 0, end: 3 }),
             frameRate: 5,
-            repeat: -1
-        })
-        this.anims.create({
-            key: 'thing-agitated',
-            frames: this.anims.generateFrameNames('thing', { start: 0, end: 3 }),
-            frameRate: 20,
             repeat: -1
         })
         // enemy animation config

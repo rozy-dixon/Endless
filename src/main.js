@@ -24,18 +24,8 @@ const game = new Phaser.Game(config)
 const { width, height } = game.config
 let cursors
 
-// [ ] delay not going down (send to nate and nathan)
-
-// [ ] Ask about the loading bar
-// [ ] scene transition (game.renderer.snapshot)
-// [ ] store hi-score
-// [ ] display keys as pressed
-// [ ] Limit teleportation ??
-// [ ] damping
-// [ ] forward and backward animations
-// [ ] check fsm for narmalizing and shirt+space
-// [ ] destroy the oh collided with on impact
-// [ ] hurt animation
-// [ ] make randomizaion tile specific
-// [ ] make enemies and ohs collide
-// [ ] setRandomPosition()
+// FINAL TO-DO
+// [ ] loading bar
+// [ ] hi-score
+// [ ] scene transitions (game.renderer.snapshot)
+// [ ] font
