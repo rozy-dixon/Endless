@@ -25,7 +25,6 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     update() {
         // When the first enemy is almost gone, throw in a new one
         // https://github.com/nathanaltice/Paddle-Parkour-P360 used as reference
-        // [ ] shorten
         if(this.new && this.x <= width/9 && this.level <= 30) { 
             this.scene.addEnemy(this.parent, this.velocityX) 
             this.new = false

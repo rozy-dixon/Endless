@@ -14,10 +14,12 @@ class Play extends Phaser.Scene {
         this.OH_VELOCITY = 300
         this.DELAY = 3000
         this.SECONDS = 0
+        this.FINAL_SCORE = 0
     }
 
     create() {
-        console.log("PLAY SCENE! YIPPPEEEEE!!") // just checking :)
+        //console.log("PLAY SCENE! YIPPPEEEEE!!") // just checking :)
+        
         // play my little tune
         this.tune = this.sound.add('tune', { 
             mute: false,
@@ -35,6 +37,7 @@ class Play extends Phaser.Scene {
         this.explosionSound = explosions[Math.floor(Math.random()*3)]
 
         // COLLISION CONFIG
+        this.physics.world.setBounds(0, 0, width, height-55, true, true, true, true)
         // thing collision config
         this.thing = this.physics.add.sprite(35, 0, 'thing', 1).setOrigin(1, 0)
         this.thing.body.immovable = true
@@ -77,22 +80,21 @@ class Play extends Phaser.Scene {
         // UI & SCORE CONFIG
         // https://phaser.io/examples/v3/category/geom/rectangle used as reference
         // https://janisjenny.medium.com/how-to-set-world-bounds-with-phaser-99bde692970e used as reference
-        this.thingScore = 0
-        this.exScore = 0
+        this.thingScore = 70
         this.ohScore = 0
         this.gameOver = false
-        this.exScoreUI = this.add.text(width/2, 32, this.exScore).setOrigin(0.5)
-        this.physics.world.setBounds(0, 0, width, height-55, true, true, true, true)
         // black out the UI box
         const blackFill = this.add.graphics({ fillStyle: { color: 0x101010 } })
         const blackBoxUI = new Phaser.Geom.Rectangle(0, 700, width, 55)
         blackFill.fillRectShape(blackBoxUI).setDepth(100)
-        this.whiteFill = this.add.graphics({ lineStyle: { width: 0, color: 0xF6F0DD }, fillStyle: { color: 0xF6F0DD } })
-        this.scoreBarUI = new Phaser.Geom.Rectangle((width/2)-(350/2), 710, this.ohScore, 35)      // max size: 472.5
-        this.whiteFill.fillRectShape(this.scoreBarUI).setDepth(100)
         // ui bar temp
-        this.uiBar = this.add.sprite((width/2)-(350/2), 710, 'uiBar', 1).setOrigin(0, 0).setDepth(100)
-        this.uiBar.anims.play('ui-bar')
+        this.cropValue = 0
+        this.uiBarRed = this.add.sprite(width-10, 710, 'uiBarRed', 1).setOrigin(1, 0).setDepth(100)
+        this.uiBarRed.anims.play('ui-red')
+        this.uiBar = this.add.sprite(width-10, 710, 'uiBar', 1).setOrigin(1, 0).setDepth(100).setCrop(this.cropValue, 0, 525, 35)
+        this.uiBar.anims.play('ui-white')
+        // score display
+        this.finalScoreUI = this.add.bitmapText(10, 710, 'rozyFont', this.FINAL_SCORE, 35).setOrigin(0, 0).setDepth(100)
     }
 
     update() {
@@ -100,7 +102,10 @@ class Play extends Phaser.Scene {
         if(this.gameOver) {
             this.tune.stop()
             this.timer.destroy()
-            this.scene.start("gameOverScene")
+            this.scene.start('gameOverScene', { 
+                SECONDS: this.SECONDS,
+                FINAL_SCORE: this.FINAL_SCORE
+            })
         }
 
         // scrolling background
@@ -123,8 +128,8 @@ class Play extends Phaser.Scene {
         }
         if(this.physics.collide(this.player, this.ex)) {
             this.handleThingScoreSubtract()
-            this.exScore++
-            this.exScoreUI.text = this.exScore
+            this.FINAL_SCORE++
+            this.finalScoreUI.text = this.FINAL_SCORE
             this.exParticles()
             this.ex.move()
             this.cameras.main.shake(80, 0.01)
@@ -158,12 +163,13 @@ class Play extends Phaser.Scene {
             this.thingScore += 5
         }
         // https://phaser.io/examples/v3/category/geom/rectangle used as reference
-        if(this.ohScore < 210) {
-            this.ohScore += 2.5
-            this.scoreBarUI.width = this.ohScore
-            this.whiteFill.clear()
-            this.whiteFill.fillRectShape(this.scoreBarUI)
-        } else if(this.ohScore >= 210) {
+        if(this.ohScore < 150) {
+            this.ohScore += 5
+            if(this.ohScore%10 == 0) {
+                this.cropValue += 35
+                this.uiBar.setCrop(this.cropValue, 0, 525, 35)
+            }
+        } else if(this.ohScore >= 150) {
             this.gameOver = true
         }
         this.sound.play(this.explosionSound)
@@ -189,10 +195,6 @@ class Play extends Phaser.Scene {
             this.SPEED += .5
             this.OH_VELOCITY += 20
             this.ENEMY_VELOCITY -= 20
-            // [ ] speed up animation
-        }
-        if(this.SECONDS%10 == 0) {
-            console.log(this.SECONDS)
         }
     }
 

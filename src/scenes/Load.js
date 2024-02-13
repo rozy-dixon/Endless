@@ -24,7 +24,8 @@ class Load extends Phaser.Scene {
         this.load.spritesheet('playerCharacterHurt', './assets/spritesheets/playerCharacterHurt.png', { frameWidth: 35, frameHeight: 35 })
         this.load.spritesheet('enemyCharacter', './assets/spritesheets/enemyCharacter.png', { frameWidth: 70, frameHeight: 70 })
         this.load.spritesheet('thing', './assets/spritesheets/thing.png', { frameWidth: 980, frameHeight: 700 })
-        this.load.spritesheet('uiBar', './assets/spritesheets/uiBar.png', { frameWidth: 210, frameHeight: 35 })
+        this.load.spritesheet('uiBar', './assets/spritesheets/uiBar.png', { frameWidth: 525, frameHeight: 35 })
+        this.load.spritesheet('uiBarRed', './assets/spritesheets/uiBarRed.png', { frameWidth: 525, frameHeight: 35 })
         // ex, oh, and square (cross prep) loaded as spritesheets incase I want to add animations
         this.load.spritesheet('exCharacter', './assets/exCharacter.png', { frameWidth: 35, frameHeight: 35 })
         this.load.spritesheet('ohCharacterGreen', './assets/ohCharacterGreen.png', { frameWidth: 35, frameHeight: 35 })
@@ -56,7 +57,7 @@ class Load extends Phaser.Scene {
     }
 
     create() {
-        console.log('LOADING SCREEN! OH BOY!')  // just checking :)
+        //console.log('LOADING SCREEN! OH BOY!')  // just checking :)
 
         // CONFIGURE ANIMATIONS
         // character animation config
@@ -94,9 +95,15 @@ class Load extends Phaser.Scene {
         })
         // UI bar
         this.anims.create({
-            key: 'ui-bar',
-            frames: this.anims.generateFrameNames('uiBar', {start: 0, end: 9 }),
-            framRate: 10,
+            key: 'ui-white',
+            frames: this.anims.generateFrameNames('uiBar', { start: 0, end: 3 }),
+            framRate: 5,
+            repeat: -1
+        })
+        this.anims.create({
+            key: 'ui-red',
+            frames: this.anims.generateFrameNames('uiBarRed', { start: 0, end: 3 }),
+            framRate: 5,
             repeat: -1
         })
 

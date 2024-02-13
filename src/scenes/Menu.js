@@ -4,13 +4,10 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-        console.log("MENU SCENE! YAHOOOO!") // just checking :)
+        //console.log("MENU SCENE! YAHOOOO!") // just checking :)
 
         // set background
         this.add.image(0, 0, 'menu').setOrigin(0, 0)
-
-        // font test
-        this.add.bitmapText(35, 35, 'rozyFont', 'DRIP', 35).setOrigin(0, 0)
 
         // define cursors
         cursors = this.input.keyboard.createCursorKeys()
@@ -20,10 +17,6 @@ class Menu extends Phaser.Scene {
         if(cursors.up.isDown) {
             this.sound.play('click3')
             this.scene.start('playScene')
-        }
-        if(cursors.left.isDown) {
-            this.sound.play('click1')
-            this.scene.start('gameOverScene')
         }
         if(cursors.right.isDown) {
             this.sound.play('click2')

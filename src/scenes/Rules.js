@@ -4,7 +4,7 @@ class Rules extends Phaser.Scene {
     }
 
     create() {
-        console.log("RULES SCENE! AMAZING!") // just checking :)
+        //console.log("RULES SCENE! AMAZING!") // just checking :)
 
         // set background
         this.add.image(0, 0, 'rules').setOrigin(0, 0)
