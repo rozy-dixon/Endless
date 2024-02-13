@@ -163,13 +163,13 @@ class Play extends Phaser.Scene {
             this.thingScore += 5
         }
         // https://phaser.io/examples/v3/category/geom/rectangle used as reference
-        if(this.ohScore < 150) {
+        if(this.ohScore < 215) {
             this.ohScore += 5
-            if(this.ohScore%10 == 0) {
+            if(this.ohScore%15 == 0) {
                 this.cropValue += 35
                 this.uiBar.setCrop(this.cropValue, 0, 525, 35)
             }
-        } else if(this.ohScore >= 150) {
+        } else if(this.ohScore >= 215) {
             this.gameOver = true
         }
         this.sound.play(this.explosionSound)
