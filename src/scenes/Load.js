@@ -97,13 +97,13 @@ class Load extends Phaser.Scene {
         this.anims.create({
             key: 'ui-white',
             frames: this.anims.generateFrameNames('uiBar', { start: 0, end: 3 }),
-            framRate: 5,
+            frameRate: 5,
             repeat: -1
         })
         this.anims.create({
             key: 'ui-red',
             frames: this.anims.generateFrameNames('uiBarRed', { start: 0, end: 3 }),
-            framRate: 5,
+            frameRate: 5,
             repeat: -1
         })
 
