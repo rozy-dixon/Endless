@@ -29,9 +29,3 @@ const { width, height } = game.config
 let cursors
 let hiScore
 let newHiScore = false
-
-// uncomment the following line if you need to purge local storage data
-//localStorage.clear()
-
-// OFFICE HOURS
-// [ ] why is the ui bar going so fast????

@@ -132,7 +132,7 @@ class Play extends Phaser.Scene {
             this.finalScoreUI.text = this.FINAL_SCORE
             this.exParticles()
             this.ex.move()
-            this.cameras.main.shake(80, 0.01)
+            this.cameras.main.shake(80, 0.02)
             this.sound.play('exCollide')
         }
 
